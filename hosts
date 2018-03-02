@@ -2,15 +2,8 @@
 master
 
 [private-agents]
-52.42.231.224
-54.218.55.28
-34.209.156.249
-34.218.78.254
-54.186.232.155
-54.213.57.87
-54.214.173.76
-34.217.57.225
-[public-agents]
-34.213.163.166
+public_agent
 
-#localhost ansible_connection=local
+[public-agents]
+
+localhost ansible_connection=local

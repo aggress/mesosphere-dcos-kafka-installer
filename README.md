@@ -139,12 +139,13 @@ make install-cp-zookeeper
 Watch Ansible do its magic and your new service is deployed
 
 Repeat for the rest of the stack
-
+```
 make install-cp-kafka
 make install-cp-schema
 make install-cp-rest
 make install-cp-connect
 make install-cp-control
+```
 
 ## Active Directory
 
