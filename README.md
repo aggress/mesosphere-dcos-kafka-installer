@@ -109,21 +109,20 @@ Test the DC/OS cli `dcos node`
 
 Run `make` with no options to review the options.
 
-If you need a test AD server you must read the Active Directory setup notes below, then spin up AD with
+If you need a test AD server you must read the [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer#active-directory) setup notes first, then spin up AD with
 ```
 make ad-deploy  
 ```
 
-You will need to copy the generated `create_keytabs.bat` onto the AD server, run it and copy the generated keytabs back into `output`.
+Whether you're using a test AD server or a corporate one, you now need to create the batch script which automates the user, principal, keytab generation.
 
-There are two setup stages before deploying a service. Firstly generate the AD keytabs batch script to generate credentials
 ```
 make ad-keytabs-bat
 ```
 
-With that you can create all the AD/Kerberos credentials for the service. Those need to be copied back to the `output` folder before you can proceed.
+Copy `output/create_keytabs.bat` onto the AD server, run it and copy the generated keytabs back into `output`. Again see the [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer#active-directory) notes for the quickest way to do this with a test AD server.
 
-Then run the one time setup which creates a special certificate required for the l4lb service, adds the keytabs as DC/OS secrets, adds the Kerberos krb5.conf and client-jaas.conf as secrets and temporarily adds the confluent-aux-universe where the security enabled community packages currently reside.
+Next, run the one time setup which creates a special certificate required for the l4lb service, adds the keytabs as DC/OS secrets, adds the Kerberos krb5.conf and client-jaas.conf as secrets and temporarily adds the confluent-aux-universe where the security enabled community packages currently reside.
 ```
 make one-time-setup
 ```
