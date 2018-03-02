@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Build the client-jaas.conf in the output directory
+    template: src=../templates/client-jaas.conf.j2 dest=../output/{{ kafka_cluster_identifier }}-client-jaas.conf
+
+  - name: Build the krb5.conf in the output directory
+    template: src=../templates/krb5.conf.j2 dest=../output/{{ kafka_cluster_identifier }}-krb5.conf
+
+  - name: Build the client.properties in the output directory
+    template: src=../templates/client.properties.j2 dest=../output/{{ kafka_cluster_identifier }}-client.properties

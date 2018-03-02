@@ -1,0 +1,49 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Get the DC/OS master from dcos node
+    shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
+    register: dcos_master
+
+  - name: Create a temporary directory for the Kafka client configs
+    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" mkdir /tmp/kafkatest
+
+  - name: SCP the clients.keytab to the master
+    command: scp ../output/{{ kafka_cluster_identifier}}-clients.keytab "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: SCP the client-jaas.conf to the master
+    command: scp ../output/{{ kafka_cluster_identifier }}-client-jaas.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: SCP the client.properties to the master
+    command: scp ../output/{{ kafka_cluster_identifier }}-client.properties "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: SCP the krb5.conf to the master
+    command: scp ../output/{{ kafka_cluster_identifier }}-krb5.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: Get the ca bundle back
+    shell: curl -k -v $(dcos config show core.dcos_url)/ca/dcos-ca.crt -o ../output/ca-bundle.crt
+
+  - name: Create a signed certificate
+    shell: dcos security cluster ca newcert --cn test --host test -j > ../output/selfsigned.json
+
+  - name: Export certificate from JSON blob
+    shell: cat ../output/selfsigned.json | jq -r .certificate > ../output/pub.crt
+
+  - name: Export priv key from JSON blob
+    shell: cat ../output/selfsigned.json | jq -r .private_key > ../output/priv.key
+
+  - name: Convert the pub/priv keypair to a PKCS12 key
+    shell: openssl pkcs12 -export -password pass:export -in ../output/pub.crt -inkey ../output/priv.key -out ../output/keypair.p12 -name keypair -CAfile ../output/ca-bundle.crt -caname root
+
+  - name: Create the keystore
+    shell: keytool -importkeystore -deststorepass changeit -destkeypass changeit -destkeystore ../output/keystore.jks -srckeystore ../output/keypair.p12 -srcstoretype PKCS12 -srcstorepass export -alias keypair
+
+  - name: Create the truststore
+    shell: keytool -import -trustcacerts -noprompt -alias root -file ../output/ca-bundle.crt -storepass changeit -keystore ../output/truststore.jks
+
+  - name: SCP the keystore to the master
+    command: scp ../output/keystore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: SCP the truststore to the master
+    command: scp ../output/truststore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/

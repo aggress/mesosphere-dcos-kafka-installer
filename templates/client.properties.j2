@@ -1,0 +1,7 @@
+security.protocol=SASL_SSL
+sasl.mechanism=GSSAPI
+sasl.kerberos.service.name={{ kafka_cluster_identifier }}-beta-confluent-kafka
+ssl.truststore.location = /tmp/kafkatest/truststore.jks
+ssl.truststore.password = changeit
+ssl.keystore.location = /tmp/kafkatest/keystore.jks
+ssl.keystore.password = changeit

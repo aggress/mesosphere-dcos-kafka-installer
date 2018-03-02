@@ -1,0 +1,19 @@
+KafkaClient {
+    com.sun.security.auth.module.Krb5LoginModule required
+    doNotPrompt=true
+    useTicketCache=false
+    principal="schema/{{ kafka_cluster_identifier }}.schema.mesosphere.com@{{ realm|upper }}"
+    useKeyTab=true
+    serviceName="kafka"
+    keyTab="/tmp/kafka-client.keytab";
+};
+
+Client {
+    com.sun.security.auth.module.Krb5LoginModule required
+    doNotPrompt=true
+    useTicketCache=false
+    principal="schema/{{ kafka_cluster_identifier }}.schema.mesosphere.com@{{ realm|upper }}"
+    useKeyTab=true
+    serviceName="kafka"
+    keyTab="/tmp/kafka-client.keytab";
+};

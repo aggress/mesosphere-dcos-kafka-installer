@@ -1,0 +1,21 @@
+[logging]
+    default = STDERR
+    kdc = STDERR
+    admin_server = STDERR
+
+[libdefaults]
+    default_realm = {{ realm|upper }}
+    dns_lookup_realm = false
+    dns_lookup_kdc = false
+    ticket_lifetime = 24h
+    renew_lifetime = 7d
+    forwardable = true
+
+[realms]
+    {{ realm|upper }} = {
+        kdc = {{ ad_hostname }}:88
+    }
+
+[domain_realm]
+    .{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory = {{ realm|upper }}
+    {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory = {{ realm|upper }}

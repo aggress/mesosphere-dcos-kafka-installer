@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    
+  - set_fact: package="{{ package_to_install }}"
+
+  - name: Get Zookeeper endpoints
+    shell: dcos beta-confluent-kafka-zookeeper --name={{ kafka_cluster_identifier }}-beta-confluent-kafka-zookeeper endpoint clientport | jq -r .dns[] | paste -sd, -
+    register: zk_endpoints
+    when: package == "confluent-connect-x" or package == "confluent-schema-registry-x" or package == "confluent-control-center-x" or package == "beta-confluent-kafka" or package == "confluent-rest-proxy-x"
+
+  - name: Get Broker-TLS endpoints
+    shell: dcos beta-confluent-kafka --name={{ kafka_cluster_identifier }}-beta-confluent-kafka endpoint broker-tls | jq -r .dns[] | paste -sd, -
+    register: broker_tls_endpoints
+    when: package == "confluent-connect-x" or package == "confluent-control-center-x" or package == "confluent-rest-proxy-x"
+
+  - name: Build {{ package }} with all the security options JSON
+    template: src=../templates/{{ package }}.json-strict-secure.j2 dest=../output/{{ package }}.json
+    when: all_the_security == true

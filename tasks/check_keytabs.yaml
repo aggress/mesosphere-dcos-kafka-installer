@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Checking for {{ kafka_cluster_identifier }}-zookeeper.keytab
+    stat:
+      path: ../output/{{ kafka_cluster_identifier}}-zookeeper.keytab
+    register: zookeeper_keytab
+  - fail:
+      msg: "{{ kafka_cluster_identifier}}-zookeeper.keytab does not exist"
+    when: zookeeper_keytab.stat.exists == False
+
+  - name: Checking for {{ kafka_cluster_identifier }}-brokers.keytab
+    stat:
+      path: ../output/{{ kafka_cluster_identifier}}-brokers.keytab
+    register: brokers_keytab
+  - fail:
+      msg: "{{ kafka_cluster_identifier}}-brokers.keytab does not exist"
+    when: brokers_keytab.stat.exists == False
+
+  - name: Checking for {{ kafka_cluster_identifier }}-clients.keytab
+    stat:
+      path: ../output/{{ kafka_cluster_identifier}}-clients.keytab
+    register: clients_keytab
+  - fail:
+      msg: "{{ kafka_cluster_identifier}}-clients.keytab does not exist"
+    when: clients_keytab.stat.exists == False
+
+  - name: Checking for {{ kafka_cluster_identifier }}-schema.keytab
+    stat:
+      path: ../output/{{ kafka_cluster_identifier}}-schema.keytab
+    register: schema_keytab
+  - fail:
+      msg: "{{ kafka_cluster_identifier }}-schema.keytab does not exist"
+    when: schema_keytab.stat.exists == False

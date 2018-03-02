@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - set_fact: package="{{ package_to_install }}"
+
+  - import_tasks: security.yaml
+    when: package == "beta-confluent-kafka-zookeeper" or package == "beta-confluent-kafka"
+
+  - name: Install {{ kafka_cluster_identifier}}-{{ package }}
+    command: dcos package install {{ package }} --options=../output/{{ package }}.json --yes

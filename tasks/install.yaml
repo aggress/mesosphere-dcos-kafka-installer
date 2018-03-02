@@ -1,0 +1,4 @@
+---
+- name: Install {{ kafka_cluster_identifier}}-{{ package }}
+  command: dcos package install {{ package }} --options=roles/setup/tasks/output/{{ package }}.json --yes
+

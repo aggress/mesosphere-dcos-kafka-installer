@@ -1,0 +1,70 @@
+---
+# AD hostname: If this is AD on AWS for testing, will require the public DNS name
+ad_hostname: 
+
+# DC/OS security mode: disabled, permissive, strict
+security: strict
+
+# Kafka Kerberos and TLS enabled. Values: true or false
+all_the_security: true
+
+# Kafka cluster identifier: In a multi-tenant environment you'll want a unique name for each component and stack
+# eg. beta-confluent-kafka-dev0, cl3453-kafka. This will be used for naming AD credentials and clusters.
+kafka_cluster_identifier: cl3453
+
+# AD user password: For testing purposes these can all be the same
+ad_user_password: 
+
+# Kerberos Realm
+realm: ad.mesosphere.com
+
+# Toggle AWS AD testing for keytab generation e.g. true | false
+aws_ad: true
+
+# SSH user
+ssh_user: centos
+
+# Beta or GA
+beta_or_ga: beta-confluent
+
+
+#################### 
+# CloudFormation Active Directory Specific Paramters
+#################### 
+
+# AWS region: e.g. us-west-2
+aws_region: us-west-2
+
+# AD DomainNetBIOSName
+ad_netbios_name: AD
+
+# EC2 Keypair
+ec2_keypair:
+
+# SourceCidrForRDP: IP CIDR for access to AD RDP and SSH: eg. 0.0.0.0/0 or 192.168.1.2/32
+access_cidr: 0.0.0.0/0
+
+# SourceCidrForKerberos: IP CIDR for access to Kerberos on TCP/UDP 88 e.g. eg. 0.0.0.0/0 or 192.168.1.2/32
+kerberos_cidr: 0.0.0.0/0
+
+# Auto Launch xfreerdp after AWS AD has been built: true | false
+auto_xfreerdp: false
+
+
+#################### 
+# Other
+#################### 
+
+path_tmp: "/tmp"
+
+beta_packages: [ 'beta-confluent-kafka-zookeeper', 'beta-confluent-kafka', 'confluent-connect', 'confluent-schema-registry', 'confluent-replicator', 'confluent-control-center' ]
+
+packages: [ 'confluent-kafka-zookeeper', 'confluent-kafka', 'confluent-connect', 'confluent-schema-registry', 'confluent-replicator', 'confluent-control-center' ]
+
+##### NOT USED YET
+
+# Number of Zookeeper nodes - 3/5/7
+zk_nodes: 3
+
+# Number of Kafka brokers - 3/5/7
+kafka_brokers: 3

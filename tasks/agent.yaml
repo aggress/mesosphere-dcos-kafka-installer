@@ -1,0 +1,8 @@
+---
+- hosts: public-agents
+  tasks:
+  - name: Set authorized key took from url
+    authorized_key:
+      user: centos
+      state: present
+      key: https://github.com/elubow.keys

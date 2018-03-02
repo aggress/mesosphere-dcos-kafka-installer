@@ -1,0 +1,7 @@
+---
+- set_fact: package="{{ package_to_install }}"
+
+- set_fact:
+  beta_or_ga: beta-confluent
+  
+- import_tasks: options_json.yaml

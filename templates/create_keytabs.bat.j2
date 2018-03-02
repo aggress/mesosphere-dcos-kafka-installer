@@ -1,0 +1,26 @@
+
+  
+net user zookeeper-0-server {{ ad_user_password }} /add /expires:NEVER /domain /yes
+net user zookeeper-1-server {{ ad_user_password }} /add /expires:NEVER /domain /yes
+net user zookeeper-2-server {{ ad_user_password }} /add /expires:NEVER /domain /yes
+net user kafka-0-broker {{ ad_user_password }} /add /expires:NEVER /domain /yes
+net user kafka-1-broker {{ ad_user_password }} /add /expires:NEVER /domain /yes
+net user kafka-2-broker {{ ad_user_password }} /add /expires:NEVER /domain /yes
+net user client {{ ad_user_password }} /add /expires:NEVER /domain /yes
+  
+  
+ktpass.exe                          /princ kafka/kafka-0-broker.{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser kafka-0-broker@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out brokers-0.keytab
+
+ktpass.exe /in brokers-0.keytab     /princ kafka/kafka-1-broker.{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser kafka-1-broker@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out brokers-1.keytab
+
+ktpass.exe /in brokers-1.keytab     /princ kafka/kafka-2-broker.{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser kafka-2-broker@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-brokers.keytab
+
+ktpass.exe                          /princ client@{{ realm }} /mapuser client@{{ realm|upper }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-clients.keytab
+
+ktpass.exe                          /princ zookeeper/zookeeper-0-server.{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser zookeeper-0-server@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out zk-0.keytab
+
+ktpass.exe /in zk-0.keytab          /princ zookeeper/zookeeper-1-server.{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser zookeeper-1-server@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out zk-1.keytab
+
+ktpass.exe /in zk-1.keytab          /princ zookeeper/zookeeper-2-server.{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser zookeeper-2-server@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-zookeeper.keytab
+
+ktpass.exe  /princ schema/{{ kafka_cluster_identifier }}.schema.mesosphere.com@{{ realm|upper }} /mapuser client@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-schema.keytab

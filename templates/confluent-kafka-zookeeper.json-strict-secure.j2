@@ -1,0 +1,19 @@
+{
+  "service": {
+    "name": "{{ kafka_cluster_identifier }}-{{ package }}",
+    "service_account": "{{ kafka_cluster_identifier }}-{{ package }}",
+    "service_account_secret": "{{ kafka_cluster_identifier }}-{{ package }}/private-key",
+    "security": {
+      "kerberos": {
+        "debug": true,
+        "enabled": true,
+        "realm": {{ realm|upper }},
+        "keytab_secret": "__dcos_base64__{{ kafka_cluster_identifier }}_zookeeper_keytab",
+        "kdc": {
+          "hostname": {{ ad_hostname }},
+          "kdc": 88 
+        }
+      }
+    }
+  }
+}

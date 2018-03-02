@@ -1,0 +1,55 @@
+---
+- name: Create a private and public keypair for the service, in this case {{ kafka_cluster_identifier }}-{{ package }}
+  command: dcos security org service-accounts keypair ../output/{{ kafka_cluster_identifier }}-{{ package }}-private.pem ../output/{{ kafka_cluster_identifier }}-{{ package }}-public.pem
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- name: Create a new service account using the previously created key
+  command: dcos security org service-accounts create -p ../output/{{ kafka_cluster_identifier }}-{{ package }}-public.pem -d "{{ kafka_cluster_identifier }}-{{ package }} service account" {{ kafka_cluster_identifier }}-{{ package }}
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- name: Create a secret to hold the private key for strict
+  command: dcos security secrets create-sa-secret --strict ../output/{{ kafka_cluster_identifier }}-{{ package }}-private.pem {{ kafka_cluster_identifier }}-{{ package }} {{ kafka_cluster_identifier }}-{{ package }}/private-key
+  when: ( all_the_security == true ) and ( security == "strict" )
+
+- name: Create a secret to hold the private key for permissive
+  command: dcos security secrets create-sa-secret ../output/{{ kafka_cluster_identifier }}-{{ package }}-private.pem {{ kafka_cluster_identifier }}-{{ package }} {{ kafka_cluster_identifier }}-{{ package }}/private-key
+  when: ( all_the_security == true ) and ( security == "permissive" )
+
+- name: Create a new cert
+  command: dcos security cluster ca newcert --cn test --host test
+  when: all_the_security == true
+
+# Nasty for DC/OS 1.10 only due to file based secrets
+- name: Grant user access
+  command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:superuser full
+  when: all_the_security == true
+
+- name: Grant framework role create ACL
+  command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:framework:role:{{ kafka_cluster_identifier }}-{{ package }}-role create
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- name: Grant reservation role create ACL
+  command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:reservation:role:{{ kafka_cluster_identifier }}-{{ package }}-role create
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- name: Grant volume role create ACL
+  command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:volume:role:{{ kafka_cluster_identifier }}-{{ package }}-role create  
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- name: Grant reservation principal create ACL
+  command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:reservation:principal:{{ kafka_cluster_identifier }}-{{ package }} create
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- name: Grant reservation principal delete ACL
+  command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:reservation:principal:{{ kafka_cluster_identifier }}-{{ package }} delete
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- name : Grant volume principal create ACL
+  command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:volume:principal:{{ kafka_cluster_identifier }}-{{ package }} create
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:volume:principal:{{ kafka_cluster_identifier }}-{{ package }} delete
+  when: ( all_the_security == true ) or ( security == "strict" )
+
+- command: dcos security org users grant {{ kafka_cluster_identifier }}-{{ package }} dcos:mesos:master:task:user:nobody create
+  when: ( all_the_security == true ) or ( security == "strict" )

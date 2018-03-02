@@ -1,0 +1,68 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+
+  - name: Build the AD CloudFormation template in the output directory
+    template: src=../templates/active_directory_cloudformation_template.json.j2 dest=../output/active_directory_cloudformation_template.json
+    when: ad_action == "deploy"
+
+  - name: Launch Active Directory CloudFormation Stack
+    cloudformation:
+      stack_name: "Active-Directory-{{ ansible_user_id }}"
+      state: "present"
+      region: "{{ aws_region }}"
+      disable_rollback: true
+      template: "../output/active_directory_cloudformation_template.json"
+    when: ad_action == "deploy"
+
+  - name: Destroy Active Directory CloudFormation Stack
+    cloudformation:
+      stack_name: "Active-Directory-{{ ansible_user_id }}"
+      state: "absent"
+      region: "{{ aws_region }}"
+      disable_rollback: true
+      template: "../output/active_directory_cloudformation_template.json"
+    when: ad_action == "destroy"
+
+  - name: Get the EC2 instance ID
+    ec2_instance_facts:
+      filters:
+        "tag:aws:cloudformation:stack-name": Active-Directory-{{ ansible_user_id }}
+    register: ec2_info
+    when: ad_action == "facts" or ad_action == "deploy"
+
+  - name: Add the EC2 instance ID to a fact
+    set_fact:
+      ad_instance: "{{ ec2_info.instances[1].instance_id }}"
+    when: ad_action == "facts" or ad_action == "deploy"
+
+  - name: Add the EC2 public DNS name to a fact
+    set_fact:
+      ad_dns: "{{ ec2_info.instances[1].network_interfaces[0].association.public_dns_name }}"
+    when: ad_action == "facts" or ad_action == "deploy"
+
+  - name: Get the Administrator password
+    ec2_win_password:
+      instance_id: "{{ ad_instance }}"
+      region: "{{ aws_region}}"
+      key_file: "~/.ssh/{{ ec2_keypair }}.pem"
+    register: admin_password
+    when: ad_action == "facts" or ad_action == "deploy"
+
+  - name: Print the EC2 public DNS name
+    debug:
+      var: ad_dns
+    when: ad_action == "facts" or ad_action == "deploy"
+
+  - name: Print the Administrator password
+    debug:
+      var: admin_password.win_password
+    when: ad_action == "facts" or ad_action == "deploy"
+
+  - name: Update the group_vars/all ad_hostname
+    lineinfile:
+      path: ../group_vars/all
+      regexp: 'ad_hostname:'
+      line: 'ad_hostname: {{ ad_dns }}'
+    when: ad_action == "facts" or ad_action == "deploy"

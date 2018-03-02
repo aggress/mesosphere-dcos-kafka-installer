@@ -1,0 +1,28 @@
+{
+  "rest-proxy": {
+    "name": "{{ kafka_cluster_identifier }}-{{ package }}",
+    "listener_protocol": "https",
+    "keystore_secret": "__dcos_base64__mykeystore",
+    "virtual_network_enabled": false,
+    "virtual_network_name": "dcos",
+    "instances": 1,
+    "cpus": 2,
+    "mem": 1024,
+    "heap": 768,
+    "role": "*"
+  },
+  "kafka": {
+    "bootstrap_servers": "{{ broker_tls_endpoints.stdout }}",
+    "zookeeper_connect": "{{ zk_endpoints.stdout }}",
+    "client_security_protocol": "SASL_SSL",
+    "kerberos_enabled": true,
+    "client_sasl_mechanism": "GSSAPI",
+    "client_sasl_kerberos_service_name": "kafka",
+    "kerberos_keytab_secret": "__dcos_base64__{{ kafka_cluster_identifier }}_schema_keytab",
+    "kerberos_jaas_secret": "{{ kafka_cluster_identifier }}_jaas",
+    "kerberos_krb5_secret": "{{ kafka_cluster_identifier }}_krb5"
+  },
+  "schema-registry": {
+    "url": "https://{{ kafka_cluster_identifier }}-schema-registry.marathon.l4lb.thisdcos.directory:8081"
+  }
+}
