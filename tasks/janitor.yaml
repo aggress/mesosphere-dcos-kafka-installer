@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Get the DC/OS master from DC/OS node
+    shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
+    register: dcos_master
+    
+  - set_fact: package="{{ package_to_janitor }}"
+
+  - name: Get the auth token for Janitor
+    shell: dcos config show core.dcos_acs_token
+    register: dcos_token
+
+    # Requires StrictHostKeyChecking no on /etc/ssh/ssh_config all servers as CheckHostIP=no doesn't look to be carried forwards
+  - name: Run Janitor and clean up - SSH via proxy
+    shell: dcos node ssh --option CheckHostIP=no --proxy-ip={{ dcos_master.stdout }} --leader --user={{ ssh_user }} "sudo docker run mesosphere/janitor /janitor.py -z dcos-service-{{ kafka_cluster_identifier }}-{{ package }} -r {{ kafka_cluster_identifier }}-{{ package }}-role -p {{ kafka_cluster_identifier }}-{{ package }}-principal -a {{ dcos_token.stdout }}"
+    when: on_aws == true
+
+  - name: Run Janitor and clean up
+    shell: dcos node ssh --option CheckHostIP=no --leader --user={{ ssh_user }} "sudo docker run mesosphere/janitor /janitor.py -z dcos-service-{{ kafka_cluster_identifier }}-{{ package }} -r {{ kafka_cluster_identifier }}-{{ package }}-role -p {{ kafka_cluster_identifier }}-{{ package }}-principal -a {{ dcos_token.stdout }}"
+    when: on_aws == false

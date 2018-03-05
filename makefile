@@ -21,7 +21,7 @@ help:
 	@echo "  install-cp-rest        Install Confluent Rest Proxy"
 	@echo "  install-cp-connect     Install Confluent Connect"
 	@echo "  install-cp-control     Install Confluent Control Center"
-	@echo "  install-cp-full-stack  Install Confluent Control Center"
+	@echo "  install-cp-full-stack  Install Confluent Platform Full Stack"
 	@echo ""
 	@echo "== A d m i n ============"
 	@echo ""
@@ -104,13 +104,13 @@ ad-destroy:
 client-test:
 	ansible-playbook -vvv -i hosts tasks/client_test.yaml
 
-janitor-aws:
+janitor:
 	@while [ -z "$$CONTINUE" ]; do \
       read -r -p "Confirm to run Janitor on both Zookeeper and Kafka [y/n]: " CONTINUE; \
     done ; \
     [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
-	ansible-playbook -vvv -i hosts tasks/janitor_aws.yaml -e "package_to_janitor=beta-confluent-kafka-zookeeper"
-	ansible-playbook -vvv -i hosts tasks/janitor_aws.yaml -e "package_to_janitor=beta-confluent-kafka"
+	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=beta-confluent-kafka-zookeeper"
+	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=beta-confluent-kafka"
 
 
 dcos-build:

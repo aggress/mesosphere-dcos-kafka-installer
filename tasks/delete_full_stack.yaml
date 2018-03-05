@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Delete full stack
+    shell: dcos package uninstall {{ item }} --app-id={{ kafka_cluster_identifier }}-{{ item }} --yes
+    with_items: "{{ beta_packages }}"
+
+  - name: Delete secrets 
+    shell: dcos security secrets delete /__dcos_base64__{{ kafka_cluster_identifier }}_{{ item }} --yes
+    with_items:
+      - krb5
+      - jass
+      - clients
+      - schema_keytab
+      - zookeeper_keytab
+      - brokers_keytab
+
+  - name: Delete service accounts
+    shell: dcos security org service-accounts delete {{ kafka_cluster_identifier }}-{{ beta-or-ga }}-{{ item }} --yes
+    with_items:
+      - kafka-zookeeper
+      - kafka
+
+  - name: Delete service account key secrets
+    shell: dcos security secrets delete {{ kafka_cluster_identifier }}-{{ beta-or-ga }}-{{ item }}/private-key --yes
+    with_items:
+      - kafka-zookeeper
+      - kafka
