@@ -3,7 +3,7 @@
 
 Ansible based installer for Big Data frameworks on DC/OS.
 
-![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/blob/master/docs/make-screenshot.png)
+![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/master/docs/make-screenshot.png)
 
 ## Features
 
