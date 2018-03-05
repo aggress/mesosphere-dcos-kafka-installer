@@ -3,13 +3,6 @@
 
 Ansible based installer for Big Data frameworks on DC/OS.
 
-## Introduction
-
-I needed to automate the installation of Confluent Platform with Kerberos and TLS for repeatable testing.
-That began as a 100 line shell script, and I said to myself, once this works as a prototype, I'll rebuild in Ansible.
-500 lines of shell script later.. drowning in fragile conditionals with poor validation, I scrapped it and rewrote in Ansible.
-Which I should have done from the very start. So here we are.
-
 ## Features
 
 - Deploys Confluent Platform with Active Directory/Kerberos and TLS
@@ -52,7 +45,7 @@ brew install ansible
 
 ### AWS shell
 
-If you want to launch the AD server programmatically
+If you want to launch an Active Directory server on AWS for testing, programmatically
 
 ```
 brew install awscli
@@ -78,11 +71,12 @@ sudo /usr/bin/python -m pip install cryptography
 https://docs.mesosphere.com/1.10/cli/install/#manually-installing-the-cli
 
 ### RDP client
+
 Now I've been using xfreerdp but it requires Quartz and a reboot
 ```
 brew cask install xfreerdp
 ```
-The alternative is to install Microsoft Remote Desktop 10. from the app store which also works fine
+The alternative is to install [Microsoft Remote Desktop 10](https://itunes.apple.com/gb/app/microsoft-remote-desktop-10/id1295203466?mt=12) from the app store which also works fine.
 
 ## General Usage
 
@@ -92,10 +86,10 @@ git clone @github.com:aggress/mesosphere-dcos-smack-installer.git
 ```
 Change to the project directory
 ```
-cd mesosphere-dcos-toolbox/mesosphere-dcos-smack-installer
+cd mesosphere-dcos-smack-installer
 ```
 
-Edit `group_vars/all` this contains a list of configuration options you must setup before moving forwards.
+Edit `group_vars/all` which contains a list of configuration options you must setup before moving forwards.
 
 You must have the following: ad_hostname, ad_user_password, realm, ssh_user, ec2_keypair
 
@@ -109,28 +103,32 @@ Test the DC/OS cli `dcos node`
 
 Run `make` with no options to review the options.
 
-If you need a test AD server you must read the [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer#active-directory) setup notes first, then spin up AD with
+If you need a test AD server, please read [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer/docs/activedirectory.md) first, then spin up AD with:
 ```
 make ad-deploy  
 ```
 
-Whether you're using a test AD server or a corporate one, you now need to create the batch script which automates the user, principal, keytab generation.
+Whether you're using a test AD server or a corporate one, you now need to create the batch script which automates the user, principal, keytab creation.
 
 ```
 make ad-keytabs-bat
 ```
 
-Copy `output/create_keytabs.bat` onto the AD server, run it and copy the generated keytabs back into `output`. Again see the [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer#active-directory) notes for the quickest way to do this with a test AD server.
+Copy `output/create_keytabs.bat` onto the AD server, run it and copy the generated keytabs back into `output`. Again see the [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer/docs/activedirectory.md) notes for the quickest way to do this with a test AD server.
 
-Next, run the one time setup which creates a special certificate required for the l4lb service, adds the keytabs as DC/OS secrets, adds the Kerberos krb5.conf and client-jaas.conf as secrets and temporarily adds the confluent-aux-universe where the security enabled community packages currently reside.
+Next, run the one-time-setup which:
+
+- Creates a special certificate required for the l4lb service
+- Adds the keytabs as DC/OS secrets
+- Adds the Kerberos krb5.conf as a secret
+- Adds the client-jaas.conf as a secrets
+- Adds the (temporary) confluent-aux-universe where the security enabled community packages currently reside
+
 ```
 make one-time-setup
 ```
 
 Now you're read to deploy a stack. This should be done in the order below as there are dependencies. Zookeeper must come before Kafka and Schema Registry should come before the others.
-
-Configure a service for deployment
-
 ```
 make install-cp-zookeeper
 ```
@@ -146,43 +144,9 @@ make install-cp-connect
 make install-cp-control
 ```
 
-## Active Directory
-
-If you don't have an existing Active Directory (AD) server to hand, this can spin one up on AWS using CloudFormation. AD is used to manage users, Kerberos principals and create the keytabs, which you then must download from the AD server for the services to authenticate with.
-
-### Workflow
-
-To stand up the AD server, ensure you edit the `group_vars/all` Active Directory section as these are deployment specific variables, then run
-
+Or go crazy
 ```
-make ad-deploy
+make install-cp-stack
 ```
 
-This builds a Windows 2008 R2 AD server and spits out the public DNS name and the Administrator password - thereby saving one step on the AWS console. 
-
-Install Microsoft Remote Desktop and creation a new session using these credentials. Add a local resource to the connection (shared folder) and configure it to the `output` directory. If you need to get the credentials again, run
-```
-make ad-facts
-```
-
-Open the RDP session and navigate in File explorer to the mapped folder. Copy `create_keytabs.bat` to the Desktop
-
-Run Powershell to get a command window, get to the desktop `cd Desktop` and run `create_keytabs.bat`
-
-This will add all users, create principals and keytabs. Once complete, copy all generated files on the Desktop back into the mapped folder, to copy it back to your desktop.
-
-Now you can exit the RDP session.
-
-If you're a Mesosphere employee and testing this on CCM, it will be termninated after 1 hour, so keep an eye on that time.
-
-To tear down the AD server
-```
-make ad-destroy
-```
-
-
-## Todo
-
-- Docs for AD testing
-- All the other things
 

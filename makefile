@@ -21,18 +21,20 @@ help:
 	@echo "  install-cp-rest        Install Confluent Rest Proxy"
 	@echo "  install-cp-connect     Install Confluent Connect"
 	@echo "  install-cp-control     Install Confluent Control Center"
+	@echo "  install-cp-full-stack  Install Confluent Control Center"
 	@echo ""
 	@echo "== A d m i n ============"
 	@echo ""
 	@echo "  clean                  Remove existing build artifacts"
+	@echo "  delete-full-stack      Delete a full cp stack"
 	@echo "  ad-deploy              Deploy an Active Directory server on AWS"
 	@echo "  ad-facts               Get the public DNS name and Administrator password for the AD server on AWS"
 	@echo "  ad-destroy             Destroy the AWS Active Directory server"
 	@echo "  client-test            Send creds and configs to a master for client-server testing"
+	@echo "  janitor-aws            Run Janitor to clean up reservations, roles and principals"
 	@echo "  dcos-build             Terraform and build a DC/OS cluster using Ansible"
 	@echo "  dcos-destroy           Destroy the DC/OS test environment"
 	@echo ""
-
 
 
 ad-keytabs-bat:
@@ -70,12 +72,21 @@ install-cp-control:
 	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-control-center-x"
 	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-control-center-x"
 
+install-cp-full-stack: install-cp-zookeeper install-cp-kafka install-cp-schema install-cp-rest install-cp-connect install-cp-control
+
 clean:
 	@while [ -z "$$CONTINUE" ]; do \
-      read -r -p "Confirm to clear out the output directory [y/N]: " CONTINUE; \
+      read -r -p "Confirm to clear out the output directory [y/n]: " CONTINUE; \
     done ; \
     [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
 	rm -rf $(BUILDDIR)/*
+
+delete-full-stack:
+	@while [ -z "$$CONTINUE" ]; do \
+      read -r -p "Confirm to delete the entire stack [y/n]: " CONTINUE; \
+    done ; \
+    [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
+	ansible-playbook -i hosts tasks/delete_full_stack.yaml
 
 ad-deploy:
 	ansible-playbook -i hosts tasks/ad_cloudformation_stack.yaml -e "ad_action=deploy"
@@ -85,13 +96,22 @@ ad-facts:
 
 ad-destroy:
 	@while [ -z "$$CONTINUE" ]; do \
-      read -r -p "Confirm to destroy your test AD server [y/N]: " CONTINUE; \
+      read -r -p "Confirm to destroy your test AD server [y/n]: " CONTINUE; \
     done ; \
     [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
 	ansible-playbook -i hosts tasks/ad_cloudformation_stack.yaml -e "ad_action=destroy"
 
 client-test:
 	ansible-playbook -vvv -i hosts tasks/client_test.yaml
+
+janitor-aws:
+	@while [ -z "$$CONTINUE" ]; do \
+      read -r -p "Confirm to run Janitor on both Zookeeper and Kafka [y/n]: " CONTINUE; \
+    done ; \
+    [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
+	ansible-playbook -vvv -i hosts tasks/janitor_aws.yaml -e "package_to_janitor=beta-confluent-kafka-zookeeper"
+	ansible-playbook -vvv -i hosts tasks/janitor_aws.yaml -e "package_to_janitor=beta-confluent-kafka"
+
 
 dcos-build:
 	cd ~/code/terraform-ansible-dcos; \
@@ -107,7 +127,7 @@ dcos-build:
 
 dcos-destroy:
 	@while [ -z "$$CONTINUE" ]; do \
-      read -r -p "Confirm to destroy your test DC/OS cluster [y/N]: " CONTINUE; \
+      read -r -p "Confirm to destroy your test DC/OS cluster [y/n]: " CONTINUE; \
     done ; \
     [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
 	cd ~/code/terraform-ansible-dcos; \
