@@ -1,6 +1,6 @@
 ---
 # AD hostname: If this is AD on AWS for testing, will require the public DNS name
-ad_hostname: 
+ad_hostname: ec2-34-208-0-219.us-west-2.compute.amazonaws.com
 
 # DC/OS security mode: disabled, permissive, strict
 security: strict
@@ -13,7 +13,7 @@ all_the_security: true
 kafka_cluster_identifier: 999999-rstest
 
 # AD user password: For testing purposes these can all be the same
-ad_user_password: 
+ad_user_password: MesosphereAD2018
 
 # Kerberos Realm
 realm: ad.mesosphere.com
@@ -39,7 +39,7 @@ aws_region: us-west-2
 ad_netbios_name: AD
 
 # EC2 Keypair
-ec2_keypair: 
+ec2_keypair: rshaw-uswest2
 
 # SourceCidrForRDP: IP CIDR for access to AD RDP and SSH: eg. 0.0.0.0/0 or 192.168.1.2/32
 access_cidr: 0.0.0.0/0

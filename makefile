@@ -92,7 +92,7 @@ ad-deploy:
 	ansible-playbook -i hosts tasks/ad_cloudformation_stack.yaml -e "ad_action=deploy"
 
 ad-facts:
-	ansible-playbook -i hosts tasks/ad_cloudformation_stack.yaml -e "ad_action=facts"
+	ansible-playbook -vvv -i hosts tasks/ad_cloudformation_stack.yaml -e "ad_action=facts"
 
 ad-destroy:
 	@while [ -z "$$CONTINUE" ]; do \

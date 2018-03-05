@@ -2,8 +2,9 @@
 master
 
 [private-agents]
-public_agent
+private-agent
 
 [public-agents]
+public-agent
 
 localhost ansible_connection=local
