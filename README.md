@@ -1,6 +1,8 @@
 
 # SMACK Stack Installer For Mesosphere DC/OS
 
+WORK IN PROGRESS
+
 Ansible based installer for Big Data frameworks on DC/OS.
 
 ![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/master/docs/make-screenshot.png)
@@ -9,18 +11,17 @@ Ansible based installer for Big Data frameworks on DC/OS.
 
 - Deploys Confluent Platform with Active Directory/Kerberos and TLS
 - Supports distinct naming of each cluster for multi-tenancy
+- Folder support
 - DC/OS Strict mode
-- Active Directory support
-- Deployment of an Active Directory server on AWS
+- Deployment of an Active Directory server on AWS for testing
 - Generation of AD users, principals and keytabs
 - Generated templates for JSON options
 - Makefile support (thank you for the tip @jrx)
+- Janitor cleanup
 
 ## Planned Features
 
-- Folder support
 - Configurable resources for JSON options
-- Janitor automation
 - Apache Kafka, Cassandra, DSE
 - MIT Kerberos testing environment
 - End to end client testing - reading and writing data
