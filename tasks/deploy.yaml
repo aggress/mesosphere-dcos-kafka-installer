@@ -8,4 +8,4 @@
     when: package == "beta-confluent-kafka-zookeeper" or package == "beta-confluent-kafka"
 
   - name: Install {{ kafka_cluster_identifier}}-{{ package }}
-    command: dcos package install {{ package }} --options=../output/{{ package }}.json --yes
+    command: dcos package install {{ package }} --options=../output/options/{{ package }}.json --yes

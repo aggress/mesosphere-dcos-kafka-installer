@@ -6,24 +6,29 @@
     shell: dcos package uninstall {{ item }} --app-id={{ kafka_cluster_identifier }}-{{ item }} --yes
     with_items: "{{ beta_packages }}"
 
-  - name: Delete secrets 
-    shell: dcos security secrets delete /__dcos_base64__{{ kafka_cluster_identifier }}_{{ item }} --yes
+  - name: Delete secret keytabs
+    shell: dcos security secrets delete /__dcos_base64__{{ kafka_cluster_identifier }}_{{ item }}
     with_items:
-      - krb5
-      - jass
-      - clients
+      - clients_keytab
       - schema_keytab
       - zookeeper_keytab
       - brokers_keytab
+      - mykeystore
+
+  - name: Delete secret files
+    shell: dcos security secrets delete /{{ kafka_cluster_identifier }}_{{ item }}
+    with_items:
+      - krb5
+      - jass
 
   - name: Delete service accounts
-    shell: dcos security org service-accounts delete {{ kafka_cluster_identifier }}-{{ beta-or-ga }}-{{ item }} --yes
+    shell: dcos security org service-accounts delete {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-{{ item }}
     with_items:
       - kafka-zookeeper
       - kafka
 
   - name: Delete service account key secrets
-    shell: dcos security secrets delete {{ kafka_cluster_identifier }}-{{ beta-or-ga }}-{{ item }}/private-key --yes
+    shell: dcos security secrets delete /{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-{{ item }}/private-key
     with_items:
       - kafka-zookeeper
       - kafka

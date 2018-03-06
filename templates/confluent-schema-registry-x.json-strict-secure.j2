@@ -1,9 +1,9 @@
 {
   "registry": {
-    "name": "{{ kafka_cluster_identifier }}-{{ package }}",
+    "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-{{ package }}",
     "zookeeper_namespace": "schema-registry",
     "listener_protocol": "https",
-    "keystore_secret": "__dcos_base64__mykeystore",
+    "keystore_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__mykeystore",
     "virtual_network_enabled": false,
     "virtual_network_name": "dcos",
     "instances": 1,
@@ -18,8 +18,8 @@
     "kerberos_enabled": true,
     "client_sasl_mechanism": "GSSAPI",
     "client_sasl_kerberos_service_name": "kafka",
-    "kerberos_keytab_secret": "__dcos_base64__{{ kafka_cluster_identifier }}_schema_keytab",
-    "kerberos_jaas_secret": "{{ kafka_cluster_identifier }}_jaas",
-    "kerberos_krb5_secret": "{{ kafka_cluster_identifier }}_krb5"
+    "kerberos_keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__schema_keytab",
+    "kerberos_jaas_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/jaas",
+    "kerberos_krb5_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/krb5"
   }
 }

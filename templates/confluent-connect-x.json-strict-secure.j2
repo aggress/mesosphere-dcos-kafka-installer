@@ -21,9 +21,9 @@
     "kerberos_enabled": true,
     "client_sasl_mechanism": "GSSAPI",
     "client_sasl_kerberos_service_name": "kafka",
-    "kerberos_keytab_secret": "__dcos_base64__{{ kafka_cluster_identifier }}_schema_keytab",
-    "kerberos_jaas_secret": "{{ kafka_cluster_identifier }}_jaas",
-    "kerberos_krb5_secret": "{{ kafka_cluster_identifier }}_krb5"
+    "kerberos_keytab_secret": "{{ kafka_cluster_identifier }}-kafka/__dcos_base64__schema_keytab",
+    "kerberos_jaas_secret": "{{ kafka_cluster_identifier }}-kafka/jaas",
+    "kerberos_krb5_secret": "{{ kafka_cluster_identifier }}-kafka/krb5"
   },
   "schema-registry": {
     "url": "https://{{ kafka_cluster_identifier }}-schema-registry.marathon.l4lb.thisdcos.directory:8081"
