@@ -13,9 +13,15 @@
     register: dcos_token
 
     # Requires StrictHostKeyChecking no on /etc/ssh/ssh_config all servers as CheckHostIP=no doesn't look to be carried forwards
-  - name: Run Janitor and clean up - SSH via proxy
+  - name: Run Janitor Zookeeper and clean up - SSH via proxy
     #shell: dcos node ssh --option CheckHostIP=no --proxy-ip={{ dcos_master.stdout }} --leader --user={{ ssh_user }} "sudo docker run mesosphere/janitor /janitor.py -z dcos-service-{{ kafka_cluster_identifier }}-{{ package }} -r {{ kafka_cluster_identifier }}-{{ package }}-role -p {{ kafka_cluster_identifier }}-{{ package }}-principal -a {{ dcos_token.stdout }}"
     shell: dcos node ssh --option CheckHostIP=no --proxy-ip={{ dcos_master.stdout }} --leader --user={{ ssh_user }} "sudo docker run mesosphere/janitor /janitor.py -z dcos-service-dev__999999-kafka__999999-beta-confluent-kafka-zookeeper -r dev__999999-kafka__999999-beta-confluent-kafka-zookeeper-role -p 999999-beta-confluent-kafka-zookeeper-principal -a {{ dcos_token.stdout }}"
+    when: on_aws == true
+
+    # Requires StrictHostKeyChecking no on /etc/ssh/ssh_config all servers as CheckHostIP=no doesn't look to be carried forwards
+  - name: Run Janitor Kafka and clean up - SSH via proxy
+    #shell: dcos node ssh --option CheckHostIP=no --proxy-ip={{ dcos_master.stdout }} --leader --user={{ ssh_user }} "sudo docker run mesosphere/janitor /janitor.py -z dcos-service-{{ kafka_cluster_identifier }}-{{ package }} -r {{ kafka_cluster_identifier }}-{{ package }}-role -p {{ kafka_cluster_identifier }}-{{ package }}-principal -a {{ dcos_token.stdout }}"
+    shell: dcos node ssh --option CheckHostIP=no --proxy-ip={{ dcos_master.stdout }} --leader --user={{ ssh_user }} "sudo docker run mesosphere/janitor /janitor.py -z dcos-service-dev__999999-kafka__999999-beta-confluent-kafka -r dev__999999-kafka__999999-beta-confluent-kafka-role -p 999999-beta-confluent-kafka-principal -a {{ dcos_token.stdout }}"
     when: on_aws == true
 
   - name: Run Janitor and clean up

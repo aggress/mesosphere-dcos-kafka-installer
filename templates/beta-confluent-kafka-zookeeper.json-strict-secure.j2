@@ -8,7 +8,7 @@
         "debug": true,
         "enabled": true,
         "realm": "{{ realm|upper }}",
-        "primary": "{{ kafka_cluster_identifier }}-kafka",
+        "primary": "zookeeper",
         "keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__zookeeper_keytab",
         "kdc": {
           "hostname": "{{ ad_hostname }}",
