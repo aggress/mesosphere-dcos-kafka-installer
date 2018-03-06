@@ -106,7 +106,7 @@ Test the DC/OS cli `dcos node`
 
 Run `make` with no options to review the options.
 
-If you need a test AD server, please read [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer/docs/activedirectory.md) first, then spin up AD with:
+If you need a test AD server, please read [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer/blob/master/docs/activedirectory.md) first, then spin up AD with:
 ```
 make ad-deploy  
 ```
@@ -117,7 +117,7 @@ Whether you're using a test AD server or a corporate one, you now need to create
 make ad-keytabs-bat
 ```
 
-Copy `output/create_keytabs.bat` onto the AD server, run it and copy the generated keytabs back into `output`. Again see the [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer/docs/activedirectory.md) notes for the quickest way to do this with a test AD server.
+Copy `output/create_keytabs.bat` onto the AD server, run it and copy the generated keytabs back into `output`. Again see the [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer/blob/master/docs/activedirectory.md) notes for the quickest way to do this with a test AD server.
 
 Next, run the one-time-setup which:
 
