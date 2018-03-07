@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Find the host Control Center is running on
+    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-confluent-control-center-x | jq -r .tasks[0].host
+    register: c3_host
+
+  - name: Find the port Control Center is running on
+    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-confluent-control-center-x | jq -r .tasks[0].ports[0]
+    register: c3_port
+
+  - name: Get the DC/OS master from DC/OS node
+    shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
+    register: dcos_master
+
+  - name: Open the SSH tunnel
+    shell: ssh -fN -L 9021:{{ c3_host.stdout }}:{{ c3_port.stdout }} {{ ssh_user }}@{{ dcos_master.stdout }}
+
+  - name: Open Control Center in browser
+    shell: open https://127.0.0.1:9021
+

@@ -17,7 +17,7 @@ help:
 	@echo "  install-cp-zookeeper   Install Confluent Platform Zookeeper"
 	@echo "  install-cp-kafka       Install Confluent Platform Kafka"
 	@echo "  install-cp-schema      Install Confluent Schema Registry"
-	@echo "  install-cp-rest        Install Confluent Rest Proxy"
+	@echo "  install-cp-rest        Install Confluent REST Proxy"
 	@echo "  install-cp-connect     Install Confluent Connect"
 	@echo "  install-cp-control     Install Confluent Control Center"
 	@echo "  install-cp-full-stack  Install Confluent Platform Full Stack"
@@ -31,6 +31,7 @@ help:
 	@echo "  destroy-ad             Destroy the AWS Active Directory server"
 	@echo "  client-test            Send creds and configs to a master for client-server testing"
 	@echo "  janitor                Run Janitor to clean up reservations, roles and principals"
+	@echo "  open-control-center    Tunnel and open Control Center in your browswer"
 	@echo "  install-dcos           Terraform and build a DC/OS cluster using Ansible"
 	@echo "  destroy-dcos           Destroy the DC/OS test environment"
 	@echo ""
@@ -128,6 +129,8 @@ janitor:
 	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=beta-confluent-kafka-zookeeper"
 	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=beta-confluent-kafka"
 
+open-control-center:
+	ansible-playbook -vvv -i hosts tasks/open_control_center.yaml
 
 install-dcos:
 	cd ~/code/terraform-ansible-dcos; \

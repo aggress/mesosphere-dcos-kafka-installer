@@ -1,6 +1,6 @@
 {
   "connect": {
-    "name": "{{ kafka_cluster_identifier }}-{{ package }}",
+    "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-{{ package }}",
     "virtual_network_enabled": false,
     "virtual_network_name": "dcos",
     "instances": 1,
@@ -21,11 +21,11 @@
     "kerberos_enabled": true,
     "client_sasl_mechanism": "GSSAPI",
     "client_sasl_kerberos_service_name": "kafka",
-    "kerberos_keytab_secret": "{{ kafka_cluster_identifier }}-kafka/__dcos_base64__schema_keytab",
-    "kerberos_jaas_secret": "{{ kafka_cluster_identifier }}-kafka/jaas",
-    "kerberos_krb5_secret": "{{ kafka_cluster_identifier }}-kafka/krb5"
+    "kerberos_keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__schema_keytab",
+    "kerberos_jaas_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/jaas",
+    "kerberos_krb5_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/krb5"
   },
   "schema-registry": {
-    "url": "https://{{ kafka_cluster_identifier }}-schema-registry.marathon.l4lb.thisdcos.directory:8081"
+    "url": "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081"
   }
 }
