@@ -8,9 +8,9 @@ Active Directory (AD) is used as an alternative to MIT Kerberos for authenticati
 
 If you don't have an existing Active Directory (AD) server to hand, we can spin one up on AWS using CloudFormation.
 
-## Workflow
+## To deploy the AD server
 
-To stand up the AD server, ensure you edit the `group_vars/all` Active Directory section as these are deployment specific variables, then run
+Ensure you edit the `group_vars/all` Active Directory section as these are deployment specific variables, then run
 
 ```
 make ad-deploy
@@ -22,7 +22,9 @@ At the end of the deployment you'll find the public DNS name presented, along wi
 
 Doing this manually through the AWS console, you'd need to find the EC2 instance and manually obtain the Administrator password, this playbook does it for you, but you must have the SSH key you specified in the following path `"~/.ssh/mysshkey.pem"` choose to server and spits out the public DNS name and the Administrator password - thereby saving one step on the AWS console. 
 
-Install the Microsoft Remote Desktop client and create a new session using these credentials. Add a local resource to the connection (shared folder) and configure it to the `output` directory. If you need to get the credentials again, run:
+Install the Microsoft Remote Desktop client and create a new session using these credentials. Add a local resource to the connection (shared folder) and configure it to the `output` directory. 
+
+## If you need to get the AD access credentials 
 ```
 make ad-facts
 ```
@@ -37,7 +39,7 @@ Now you can exit the RDP session.
 
 If you're a Mesosphere employee and testing this on CCM, it will be termninated after 1 hour, so keep an eye on that time limit.
 
-To tear down the AD server
+## To tear down the AD server
 ```
 make ad-destroy
 ```

@@ -34,7 +34,7 @@ Ansible does the heavy lifting and talks over localhost directly to the DC/OS CL
 ## Documentation
 
 - [Setup](docs/setup.md)
-- [Active Directory](docs/active_directory.md
+- [Active Directory](docs/active_directory.md)
 - [Usage](docs/usage.md)
 - [Client Testing](docs/client_testing.md)
-- [Troubleshooting](docs/troubleshooting.md)
+- TODO [Troubleshooting](docs/troubleshooting.md)
