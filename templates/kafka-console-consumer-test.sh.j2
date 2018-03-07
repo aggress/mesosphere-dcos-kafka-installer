@@ -1,0 +1,5 @@
+#!/bin/bash
+
+kafka-console-consumer --bootstrap-server {{ broker_tls_endpoint.stdout }} \
+--topic securetest --from-beginning \
+--consumer.config /tmp/kafkatest/{{ kafka_cluster_identifier }}-client.properties

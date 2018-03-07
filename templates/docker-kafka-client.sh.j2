@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker run --rm -ti \
+-v /tmp/kafkatest:/tmp/kafkatest:rw \
+-e KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafkatest/{{ kafka_cluster_identifier }}-client-jaas-testing.conf -Djava.security.krb5.conf=/tmp/kafkatest/{{ kafka_cluster_identifier }}-krb5.conf -Dsun.security.krb5.debug=true" \
+confluentinc/cp-kafka:4.0.0 \
+bash

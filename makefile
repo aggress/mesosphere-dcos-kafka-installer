@@ -118,8 +118,8 @@ destroy-ad:
     [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
 	ansible-playbook -i hosts tasks/ad_cloudformation_stack.yaml -e "ad_action=destroy"
 
-client-test:
-	ansible-playbook -vvv -i hosts tasks/client_test.yaml
+setup-client-test:
+	ansible-playbook -vvv -i hosts tasks/setup_client_test.yaml
 
 janitor:
 	@while [ -z "$$CONTINUE" ]; do \
@@ -130,7 +130,7 @@ janitor:
 	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=beta-confluent-kafka"
 
 open-control-center:
-	ansible-playbook -vvv -i hosts tasks/open_control_center.yaml
+	ansible-playbook -i hosts tasks/open_control_center.yaml
 
 install-dcos:
 	cd ~/code/terraform-ansible-dcos; \
