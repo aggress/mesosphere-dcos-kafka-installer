@@ -98,3 +98,9 @@
 
   - name: SCP the truststore to the master
     command: scp ../output/cert/truststore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: Build the REST Proxy client test script in the output directory
+    template: src=../templates/rest-proxy-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh
+
+  - name: SCP the REST Proxy client test script to the master
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/

@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+set -o xtrace
+
+echo "Produce a message using JSON with the value '{ "foo": "bar" }' to the topic jsontest"
+
+curl -k  -X POST -H "Content-Type: application/vnd.kafka.json.v2+json" \
+      -H "Accept: application/vnd.kafka.v2+json" \
+      --data '{"records":[{"value":{"foo":"bar"}}]}' "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/topics/jsontest"
+sleep 2;
+ 
+echo "Create a consumer for JSON data, starting at the beginning of the topic's"
+echo "log and subscribe to a topic. Then consume some data using the base URL in the first response"
+echo "Finally, close the consumer with a DELETE to make it leave the group and clean up"
+echo "its resources."
+
+curl -k  -X POST -H "Content-Type: application/vnd.kafka.v2+json" \
+        --data '{"name": "my_consumer_instance", "format": "json", "auto.offset.reset": "earliest"}' \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer
+sleep 2;      
+ 
+curl -k  -X POST -H "Content-Type: application/vnd.kafka.v2+json" --data '{"topics":["jsontest"]}' \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/subscription
+sleep 2;
+ 
+curl -k  -X GET -H "Accept: application/vnd.kafka.json.v2+json" \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/records
+sleep 2;
+
+curl -k  -X GET -H "Accept: application/vnd.kafka.json.v2+json" \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/records
+sleep 2;
+
+curl -k  -X DELETE -H "Content-Type: application/vnd.kafka.v2+json" \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance
+sleep 2; 
+ 
+echo "Produce a message using Avro embedded data, including the schema which will"
+echo "be registered with the schema registry and used to validate and serialize"
+echo "before storing the data in Kafka"
+
+curl -k  -X POST -H "Content-Type: application/vnd.kafka.avro.v2+json" \
+      -H "Accept: application/vnd.kafka.v2+json" \
+      --data '{"value_schema": "{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}", "records": [{"value": {"name": "testUser"}}]}' \
+      "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/topics/avrotest"
+sleep 2;
+
+echo "Produce a message with Avro key and value"
+echo "Note that if you use Avro values you must also use Avro keys, but the schemas can differ"
+ 
+curl -k  -X POST -H "Content-Type: application/vnd.kafka.avro.v2+json" \
+      -H "Accept: application/vnd.kafka.v2+json" \
+      --data '{"key_schema": "{\"name\":\"user_id\"  ,\"type\": \"int\"   }", "value_schema": "{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}", "records": [{"key" : 1 , "value": {"name": "testUser"}}]}' \
+      "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/topics/avrokeytest2"
+sleep 2;
+ 
+echo "Create a consumer for Avro data, starting at the beginning of the topic's"
+echo "log and subscribe to a topic. Then consume some data from a topic, which is decoded, translated to"
+echo "JSON, and included in the response. The schema used for deserialization is"
+echo "fetched automatically from the schema registry. Finally, clean up."
+
+curl -k  -X POST  -H "Content-Type: application/vnd.kafka.v2+json" \
+      --data '{"name": "my_consumer_instance", "format": "avro", "auto.offset.reset": "earliest"}' \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer
+sleep 2;
+ 
+curl -k  -X POST -H "Content-Type: application/vnd.kafka.v2+json" --data '{"topics":["avrotest"]}' \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/subscription
+sleep 2;
+ 
+curl -k  -X GET -H "Accept: application/vnd.kafka.avro.v2+json" \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/records
+sleep 2;
+
+curl -k  -X GET -H "Accept: application/vnd.kafka.avro.v2+json" \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/records
+sleep 2;
+ 
+curl -k  -X DELETE -H "Content-Type: application/vnd.kafka.v2+json" \
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance
+sleep 2;
