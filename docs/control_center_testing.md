@@ -14,10 +14,11 @@ This'll open an SSH tunnel to the container running Control Center and open it i
 
 The first screen that comes is the System Health and displays information about your Kafka cluster, it should look like this
 
-![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/master/docs/conrol-center-screenshot.png)
+![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/master/docs/control-center-screenshot.png)
+
 
 ## Data Streams
 
 Complete [Connect Testing](connect_testing.md) which sets up a Connect source and sink to populate data. It will then look like
 
-![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/master/docs/data-streams-screenshot.png)
+![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/master/docs/data-stream-screenshot.png)
