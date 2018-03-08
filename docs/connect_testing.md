@@ -29,15 +29,15 @@ file=/tmp/cake-source.txt
 while true; do
     echo Victoria >> \${file}
     echo Plum >> \${file}
-    echo Chocolate \${file}
+    echo Chocolate >> \${file}
     echo Christmas >> \${file}
-    echo Sponge \${file}
-    echo Orange \${file}
-    echo Ginger \${file}
-    echo Madeira \${file}
-    echo Fruit \${file}
-    echo Lemon Drizzle \${file}
-    echo Carrot \${file}
+    echo Sponge >> \${file}
+    echo Orange >> \${file}
+    echo Ginger >> \${file}
+    echo Madeira >> \${file}
+    echo Fruit >> \${file}
+    echo Lemon Drizzle >> \${file}
+    echo Carrot >> \${file}
     sleep 2
 done
 EOF
@@ -62,7 +62,7 @@ make open-control-center
 ```
 This'll open an SSH tunnel to the container running Control Center and open it in your browser.  Hint, switch to your browser.
 
-On the Control Center home page, Go to Management > Kafka Connect and select New source
+On the Control Center home page, Go to Management > `Kafka Connect` and select `New source`
 
 ```
 Connector Class > FileStreamSourceConnector
@@ -74,7 +74,7 @@ Transforms > Leave empty
 File > /tmp/cake-source.txt
 Topic > cake
 ```
-Select Continue
+Select `Continue`, review the settings and select `Save & Finish`
 ```
 Select Sinks and New Sink
 Topics > cake
@@ -87,18 +87,20 @@ Value Converter Class > org.apache.kafka.connect.storage.StringConverter
 Transforms > Leave empty
 File > /tmp/cake-sink.txt
 ```
-Select Continue
+Select `Continue`
 
-What's happening behind the scenes is Control Center talks to Connect and also Schema Registry over their REST APIs. The Connect tasks will now be started.
+What's happening behind the scenes is Control Center talks to Connect and also Schema Registry over their REST APIs. The Connect tasks will now be started and both the `SOURCES` and `SINKS` tabs at the top of the screen should show a running `cake-source` and `cake-sink`
 
 ## Validation
 
 Switch back to your Connect container, we should expect to see data being written to our sink file
 ```
+ls -al
 cat cake-sink.txt
 ```
 
 If you do, all is good. If not, check both the Control Center stdout and Connect stdout logs.
+
 
 ## Directly accessing the Connect REST API
 
