@@ -3,32 +3,37 @@
   connection: local
   tasks:
   - name: Delete full stack
-    shell: dcos package uninstall {{ item }} --app-id={{ kafka_cluster_identifier }}-{{ item }} --yes
+    shell: dcos package uninstall {{ item }} --app-id={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-{{ item }} --yes
     with_items: "{{ beta_packages }}"
+    ignore_errors: true
 
   - name: Delete secret keytabs
-    shell: dcos security secrets delete /__dcos_base64__{{ kafka_cluster_identifier }}_{{ item }}
+    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__{{ item }}
     with_items:
       - clients_keytab
       - schema_keytab
       - zookeeper_keytab
       - brokers_keytab
       - mykeystore
+    ignore_errors: true
 
   - name: Delete secret files
-    shell: dcos security secrets delete /{{ kafka_cluster_identifier }}_{{ item }}
+    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ item }}
     with_items:
       - krb5
-      - jass
+      - jaas
+    ignore_errors: true
 
   - name: Delete service accounts
     shell: dcos security org service-accounts delete {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-{{ item }}
     with_items:
       - kafka-zookeeper
       - kafka
+    ignore_errors: true
 
   - name: Delete service account key secrets
-    shell: dcos security secrets delete /{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-{{ item }}/private-key
+    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ beta_or_ga }}-{{ item }}-private-key
     with_items:
       - kafka-zookeeper
       - kafka
+    ignore_errors: true
