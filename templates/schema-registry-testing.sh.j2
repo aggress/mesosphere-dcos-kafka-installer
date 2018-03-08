@@ -47,7 +47,7 @@ sleep 2;
 
 # List all subjects
 # Expected output:
-# ["Kafka-value","Kafka-key"]
+# ["Kafka-value"]
 
 curl -k -X GET https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects
 
