@@ -1,4 +1,4 @@
-# REST Proxy Tesing
+# REST Proxy Testing
 
 To validate REST Proxy's working correctly, follow the same steps as with [Schema Registry](schema_registry_testing.md)
 ```
