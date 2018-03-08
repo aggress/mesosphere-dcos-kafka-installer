@@ -1,0 +1,81 @@
+---
+# DC/OS security mode: strict (permissive and disabled not supported yet)
+security: strict
+
+# Kafka Kerberos and TLS enabled. true: Kerberos & TLS, false: TLS (only true supported right now)
+all_the_security: true
+
+# Service group: The folder the stack lives under: dev, eng, test, prod etc
+service_group: dev
+
+# Kafka cluster identifier: In a multi-tenant environment you'll require a unique name for each component and stack
+# eg. 123456, streaming, 123456-payments. This will also be used for naming AD credentials and clusters.
+# Combined with the service_group, the format of groups and services would then be like
+# /dev/123456-kafka/123456-beta-confluent-kafka
+kafka_cluster_identifier: 123456
+
+
+#################### 
+# Kerberos
+#################### 
+
+# AD hostname: If this is AD on AWS for testing, will require the public DNS name
+ad_hostname:
+
+# AD user password: For testing purposes these can all be the same
+ad_user_password: 
+
+# Kerberos Realm
+realm:
+
+# Toggle testing on AWS, as this influences some plays like janitor.yaml: true | false
+on_aws: true
+
+# SSH user: used for testing purposes, for example, when setting up client testing to SCP files onto a master
+ssh_user: centos
+
+# Beta or GA: Right now this is locked to beta-confluent as security is not yet in the GA packages
+beta_or_ga: beta-confluent
+
+
+#################### 
+# AWS CloudFormation Active Directory Specific Paramters
+#################### 
+
+# AD DomainNetBIOSName
+ad_netbios_name: AD
+
+# AWS region: e.g. us-west-2
+aws_region: us-west-2
+
+# EC2 Keypair: this needs to be available on the AWS region and in your ~/.ssh directory
+ec2_keypair:
+
+# SourceCidrForRDP: IP CIDR for access to AD RDP and SSH: eg. 0.0.0.0/0 or 192.168.1.2/32
+access_cidr: 0.0.0.0/0
+
+# SourceCidrForKerberos: IP CIDR for access to Kerberos on TCP/UDP 88 e.g. eg. 0.0.0.0/0 or 192.168.1.2/32
+kerberos_cidr: 0.0.0.0/0
+
+
+#################### 
+# Other
+#################### 
+
+path_tmp: "/tmp"
+
+beta_packages: [ 'beta-confluent-kafka-zookeeper', 'beta-confluent-kafka', 'confluent-connect-x', 'confluent-schema-registry-x', 'confluent-rest-proxy-x', 'confluent-control-center-x' ]
+
+packages: [ 'confluent-kafka-zookeeper', 'confluent-kafka', 'confluent-connect', 'confluent-schema-registry', 'confluent-replicator', 'confluent-control-center' ]
+
+##### NOT USED YET
+
+# Number of Zookeeper nodes - 3/5/7
+zk_nodes: 3
+
+# Number of Kafka brokers - 3/5/7
+kafka_brokers: 3
+
+# Auto Launch xfreerdp after AWS AD has been built: true | false
+auto_xfreerdp: false
+
