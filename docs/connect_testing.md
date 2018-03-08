@@ -14,10 +14,10 @@ We want to get onto the Connect container to setup a shell script to continuousl
 
 Let's `task exec` onto the Connect container
 ```
-dcos task exec -it $(dcos task | grep 999999-confluent-connect | awk '{print $5}') /bin/bash
+dcos task exec -it $(dcos task | grep <kafka_cluster_identifier>-confluent-connect | awk '{print $5}') /bin/bash
 ```
 
-We'll use `/tmp/` as our working dir and we're going to setup our test script
+We'll use `/tmp` as our working dir and we're going to setup our test script
 ```
 cd /tmp
 
@@ -89,7 +89,7 @@ File > /tmp/cake-sink.txt
 ```
 Select Continue
 
-What's happening behind the scenes is Control Center talks to Connect over its REST API and also Schema Registry.
+What's happening behind the scenes is Control Center talks to Connect and also Schema Registry over their REST APIs. The Connect tasks will now be started.
 
 ## Validation
 
@@ -108,6 +108,7 @@ List all Connect tasks - get the Connect endpoint address from the UI for the ta
 ```
 curl $(/opt/mesosphere/bin/detect_ip):63053/v1/records | grep l4lb
 ```
+Get the l4lb address for Connect and paste into the curl lines below. It will look similar to:
 
 ```
 curl -k -X GET http://dev999999-kafka999999-confluent-connect-x.marathon.l4lb.thisdcos.directory:8083/connectors
