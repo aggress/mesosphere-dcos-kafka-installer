@@ -7,18 +7,31 @@ For testing purposes, so I can resolve the Mesos DNS names of the Broker endpoin
 In here needs to go the right `keytab, krb5.conf, client-jass.conf, client.properties` along with a generated `keystore` and `truststore` and then you need to launch a container with the `kafka-console-producer` and `kafka-console-consumer` and use them.
 
 Or you automate all of that so you can just get on and produce and consume messages to validate it's working.
+
+## Deploy the testing framework
 ```
 make setup-client-test
 ```
 
 That does all of the above and SCPs all the assets to your master. Now as ever, my testing harness is based on AWS, so ymmv on your environment, amend the playbook as required.
 
-Once the playbook's completed successfully you can run your test
+Once the playbook's completed successfully, SSH to the master and get shell on the Confluent Docker container, which contains the Kafka clients
 ```
 ssh <ssh_user>@<master IP>
 cd /tmp/kafkatest
 ./<kafka_cluster_identifier>-docker-kafka-client.sh
 cd /tmp/kafkatest
+```
+
+In this directory are a number of testing shell scripts, along with all the files required for authenticating with Kafka over SASL_GSSAPI.
+
+## Create test topics - TODO
+```
+./<kafka_cluster_identifier>-create-test-topics.sh
+```
+
+## Produce and consume messages
+```
 ./<kafka_cluster_identifier>-kafka-console-producer.test.sh
 ```
 
