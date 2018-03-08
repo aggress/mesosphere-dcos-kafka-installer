@@ -99,8 +99,7 @@ ls -al
 cat cake-sink.txt
 ```
 
-If you do, all is good. If not, check both the Control Center stdout and Connect stdout logs.
-
+One of Control Center's selling points is [Stream Monitoring](https://docs.confluent.io/current/control-center/docs/monitoring.html#controlcenter-userguide-monitoring) which looks shiny. With the Connect plugin doing its thing, switch back to Control Center and select `Data Streams`. You'll be presented with an active graph and metrics for the source and sink tasks you just configured.
 
 ## Directly accessing the Connect REST API
 
@@ -127,6 +126,7 @@ curl -k -X GET http://dev999999-kafka999999-confluent-connect-x.marathon.l4lb.th
 ```
 
 ## Teardown testing
+
 
 On the Connect container bring cake.sh into the foreground with 
 ```
