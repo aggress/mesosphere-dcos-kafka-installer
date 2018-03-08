@@ -1,4 +1,8 @@
 BUILDDIR = "output"
+kafka_cluster_identifier = $(shell grep kafka_cluster_identifier group_vars/all | awk '{print $2}')
+service_group = $(shell grep service_group group_vars/all | awk '{print $2}' | head -n1)
+blah = "test"
+
 .DEFAULT_GOAL := help
 
 .PHONY: addup addown help clean
@@ -6,6 +10,10 @@ BUILDDIR = "output"
 help:
 	@echo ""
 	@echo "Please use \`make <target>' where <target> is one of:"
+	@echo ""
+	@echo "  Currently configured for:"
+	@echo "  $(service_group)"
+	@echo "  $(kafka_cluster_identifier)"
 	@echo ""
 	@echo "== S e t u p ============"
 	@echo ""
