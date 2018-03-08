@@ -40,4 +40,5 @@ Ansible does the heavy lifting and talks over localhost directly to the DC/OS CL
 - [Schema Registry Testing](docs/schema_registry_testing.md)
 - [REST Proxy Testing](docs/rest_proxy_testing.md)
 - [Connect Testing](docs/connect_testing.md)
+- [Control Center Testing](docs/control_center_testing.md)
 - TODO [Troubleshooting](docs/troubleshooting.md)

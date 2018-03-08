@@ -60,7 +60,7 @@ Ensure you have Control Center installed and access it with
 ```
 make open-control-center
 ```
-This'll open an SSH tunnel to the container running Control Center and open it in your browser.  Hint, switch to your browser.
+This'll open an SSH tunnel to the container running Control Center and open it in your browser for you, or you can access it over `https://127.0.0.1:9021`
 
 On the Control Center home page, Go to Management > `Kafka Connect` and select `New source`
 
@@ -126,7 +126,6 @@ curl -k -X GET http://dev999999-kafka999999-confluent-connect-x.marathon.l4lb.th
 ```
 
 ## Teardown testing
-
 
 On the Connect container bring cake.sh into the foreground with 
 ```
