@@ -104,3 +104,14 @@
 
   - name: SCP the REST Proxy client test script to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: Build the Schema Registry client test script in the output directory
+    template: src=../templates/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh
+
+  - name: SCP the Schema Registry client test script to the master
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+
+
+
+

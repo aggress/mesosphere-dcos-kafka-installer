@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Schema Registry Test Script
+# Based on https://docs.confluent.io/current/schema-registry/docs/intro.html#quickstart
+
+set -o xtrace
+
+# List all subjects"
+
+curl -X GET -k https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects
+sleep 2;
+
+
+# Register a new version of a schema under subject Kafka-key"
+# Expected output similar to:"
+# {"id":21}"
+
+curl -k -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+    --data '{"schema": "{\"type\": \"string\"}"}' \
+    https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-key/versions
+sleep 2;
+
+
+# Register a new version of a schema under subject Kafka-value"
+# Expected output similar to"
+# {"id":21}"
+
+curl -k -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+    --data '{"schema": "{\"type\": \"string\"}"}' \
+    https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-value/versions
+sleep 2;
+
+
+# List all subjects
+# Expected output:
+# ["Kafka-value","Kafka-key"]
+
+curl -k -X GET https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects
+sleep 2;
+
+
+# Delete the most recently registered schema under subject Kafka-value
+
+curl -k -X DELETE https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-value/versions/latest
+sleep 2;
+
+
+# List all subjects
+# Expected output:
+# ["Kafka-value","Kafka-key"]
+
+curl -k -X GET https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects
+
+# End.
