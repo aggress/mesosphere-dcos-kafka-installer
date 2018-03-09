@@ -12,20 +12,36 @@ net user {{ kafka_cluster_identifier }}-kafka-br1 {{ ad_user_password }} /add /e
 
 net user {{ kafka_cluster_identifier }}-kafka-br2 {{ ad_user_password }} /add /expires:NEVER /domain /yes
 
+net user {{ kafka_cluster_identifier }}-kafka-sr {{ ad_user_password }} /add /expires:NEVER /domain /yes
+
+net user {{ kafka_cluster_identifier }}-kafka-rp {{ ad_user_password }} /add /expires:NEVER /domain /yes
+
+net user {{ kafka_cluster_identifier }}-kafka-co {{ ad_user_password }} /add /expires:NEVER /domain /yes
+
+net user {{ kafka_cluster_identifier }}-kafka-cc {{ ad_user_password }} /add /expires:NEVER /domain /yes
+
 net user {{ kafka_cluster_identifier }}-kafka-cl {{ ad_user_password }} /add /expires:NEVER /domain /yes
   
 ktpass.exe /princ kafka/kafka-0-broker.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-br0@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out brokers-0.keytab
 
 ktpass.exe /in brokers-0.keytab /princ kafka/kafka-1-broker.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-br1@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out brokers-1.keytab
 
-ktpass.exe /in brokers-1.keytab /princ kafka/kafka-2-broker.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-br2@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-brokers.keytab
+ktpass.exe /in brokers-1.keytab /princ kafka/kafka-2-broker.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-br2@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.keytab
 
-ktpass.exe /princ client@{{ realm }} /mapuser {{ kafka_cluster_identifier }}-kafka-cl@{{ realm|upper }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-clients.keytab
 
 ktpass.exe /princ zookeeper/zookeeper-0-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-zk0@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out zk-0.keytab
 
 ktpass.exe /in zk-0.keytab /princ zookeeper/zookeeper-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-zk1@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out zk-1.keytab
 
-ktpass.exe /in zk-1.keytab /princ zookeeper/zookeeper-2-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-zk2@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-zookeeper.keytab
+ktpass.exe /in zk-1.keytab /princ zookeeper/zookeeper-2-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-zk2@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.keytab
 
-ktpass.exe /princ schema/schema.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-cl@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-schema.keytab
+
+ktpass.exe /princ client/client.mesosphere.com@{{ realm }} /mapuser {{ kafka_cluster_identifier }}-kafka-cl@{{ realm|upper }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-clients.keytab
+
+ktpass.exe /princ schema/schema-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-sr@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-schema-registry-x.keytab
+
+ktpass.exe /princ rest/rest-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-rp@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-rest-proxy-x.keytab
+
+ktpass.exe /princ connect/connect-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-connect-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-co@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-connect-x.keytab
+
+ktpass.exe /princ control/control-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-control-center-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-cc@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-control-center-x.keytab

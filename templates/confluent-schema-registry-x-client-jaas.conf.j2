@@ -2,7 +2,7 @@ KafkaClient {
     com.sun.security.auth.module.Krb5LoginModule required
     doNotPrompt=true
     useTicketCache=false
-    principal="{{ item.primary }}/{{ item }}-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ item }}.mesosphere.com@{{ realm|upper }}"
+    principal="schema/schema-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ item }}.mesosphere.com@{{ realm|upper }}"
     useKeyTab=true
     serviceName="kafka"
     keyTab="/tmp/kafka-client.keytab";
@@ -12,7 +12,7 @@ Client {
     com.sun.security.auth.module.Krb5LoginModule required
     doNotPrompt=true
     useTicketCache=false
-    principal="{{ item.primary }}/{{ item }}-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ item.0.package }}.mesosphere.com@{{ realm|upper }}"
+    principal="schema/schema-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ item }}.mesosphere.com@{{ realm|upper }}"
     useKeyTab=true
     serviceName="kafka"
     keyTab="/tmp/kafka-client.keytab";

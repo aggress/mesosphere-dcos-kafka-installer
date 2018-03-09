@@ -11,7 +11,8 @@ service_group: dev
 # Kafka cluster identifier: In a multi-tenant environment you'll require a unique name for each component and stack
 # eg. 123456, streaming, 123456-payments. This will also be used for naming AD credentials and clusters.
 # Combined with the service_group, the format of groups and services would then be like
-# /dev/123456-kafka/123456-beta-confluent-kafka
+# /dev/123456-kafka/123456-beta-confluent-kafka. Due to Active Directory limitations, this cannot be more than
+# 20 characters, and in its current format, this cannot be more than 9.
 kafka_cluster_identifier: 123456
 
 
@@ -64,7 +65,12 @@ kerberos_cidr: 0.0.0.0/0
 
 path_tmp: "/tmp"
 
+# An array used in multiple places
 beta_packages: [ 'beta-confluent-kafka-zookeeper', 'beta-confluent-kafka', 'confluent-connect-x', 'confluent-schema-registry-x', 'confluent-rest-proxy-x', 'confluent-control-center-x' ]
+
+community_packages: [ 'confluent-schema-registry-x', 'confluent-rest-proxy-x', 'confluent-connect-x', 'confluent-control-center-x' ]
+
+primaries: [ 'schema', 'rest', 'connect', 'control' ]
 
 packages: [ 'confluent-kafka-zookeeper', 'confluent-kafka', 'confluent-connect', 'confluent-schema-registry', 'confluent-replicator', 'confluent-control-center' ]
 

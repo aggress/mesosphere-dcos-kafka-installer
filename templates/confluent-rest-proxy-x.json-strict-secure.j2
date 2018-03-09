@@ -18,8 +18,8 @@
     "kerberos_enabled": true,
     "client_sasl_mechanism": "GSSAPI",
     "client_sasl_kerberos_service_name": "kafka",
-    "kerberos_keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__schema_keytab",
-    "kerberos_jaas_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/jaas",
+    "kerberos_keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__{{ package }}_keytab",
+    "kerberos_jaas_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ package }}-jaas",
     "kerberos_krb5_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/krb5"
   },
   "schema-registry": {

@@ -14,17 +14,17 @@ Ansible based installer for Big Data frameworks on DC/OS.
 - Folder support
 - DC/OS Strict mode
 - Deployment of an Active Directory server on AWS for testing
-- Generation of AD users, principals and keytabs
+- Generation of AD users, principals and keytabs, configs
 - Generated templates for JSON options
-- Makefile support (thank you for the tip @jrx)
+- Makefile support for menuing(thank you for the tip @jrx)
 - Janitor cleanup
+- End to end client testing - reading and writing data
 
 ## Planned Features
 
 - Configurable resources for JSON options
 - Apache Kafka, Cassandra, DSE
 - MIT Kerberos testing environment
-- End to end client testing - reading and writing data
 - Standalone monitoring deployment integrated with dcos-metrics
 
 ## Design

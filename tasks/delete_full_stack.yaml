@@ -7,21 +7,22 @@
     with_items: "{{ beta_packages }}"
     ignore_errors: true
 
-  - name: Delete secret keytabs
-    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__{{ item }}
-    with_items:
-      - clients_keytab
-      - schema_keytab
-      - zookeeper_keytab
-      - brokers_keytab
-      - mykeystore
+  - name: Delete keytab secrets
+    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__{{ item }}_keytab
+    with_items: "{{ beta_packages }}"
     ignore_errors: true
 
-  - name: Delete secret files
-    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ item }}
-    with_items:
-      - krb5
-      - jaas
+  - name: Delete keystore secret
+    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__mykeystore
+    ignore_errors: true
+
+  - name: Delete client-jaas.conf secrets
+    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ item }}-jaas
+    with_items: "{{ community_packages }}"
+    ignore_errors: true
+
+  - name: Delete krb5.conf secret
+    shell: dcos security secrets delete /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/krb5
     ignore_errors: true
 
   - name: Delete service accounts
@@ -37,3 +38,5 @@
       - kafka-zookeeper
       - kafka
     ignore_errors: true
+
+

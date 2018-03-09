@@ -3,7 +3,9 @@
   connection: local
   tasks:
   - name: Build the client-jaas.conf in the output directory
-    template: src=../templates/client-jaas.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-client-jaas.conf
+    template: src=../templates/{{ item }}-client-jaas.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-{{ item }}-client-jaas.conf
+    with_items: "{{ community_packages }}"
+
 
   - name: Build the krb5.conf in the output directory
     template: src=../templates/krb5.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-krb5.conf

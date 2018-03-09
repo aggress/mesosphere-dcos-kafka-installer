@@ -15,7 +15,7 @@
     register: dcos_master
 
   - name: Open the SSH tunnel
-    shell: ssh -fN -L 9021:{{ c3_host.stdout }}:{{ c3_port.stdout }} {{ ssh_user }}@{{ dcos_master.stdout }}
+    shell: ssh -fN -L 9022:{{ c3_host.stdout }}:{{ c3_port.stdout }} {{ ssh_user }}@{{ dcos_master.stdout }}
 
   - name: Open Control Center in browser
-    shell: open https://127.0.0.1:9021
+    shell: open https://127.0.0.1:9022

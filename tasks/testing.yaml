@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Build the client-jaas-testing.conf in the output directory
+    template: src=../templates/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh

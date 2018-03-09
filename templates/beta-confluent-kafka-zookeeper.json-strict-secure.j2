@@ -9,7 +9,7 @@
         "enabled": true,
         "realm": "{{ realm|upper }}",
         "primary": "zookeeper",
-        "keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__zookeeper_keytab",
+        "keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__{{ package }}_keytab",
         "kdc": {
           "hostname": "{{ ad_hostname }}",
           "kdc": "88" 
