@@ -1,0 +1,1 @@
+Please copy and rename templates/all_template to this folder - group_vars/all and complete the required fields before proceeding
