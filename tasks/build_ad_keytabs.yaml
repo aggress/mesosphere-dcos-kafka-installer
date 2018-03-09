@@ -3,4 +3,4 @@
   connection: local
   tasks:
   - name: Build the create_keytabs batch script in the output directory
-    template: src=../templates/create_keytabs.bat.j2 dest=../output/keytabs/create-keytabs.bat
+    template: src=../templates/other/create_keytabs.bat.j2 dest=../output/keytabs/create-keytabs.bat

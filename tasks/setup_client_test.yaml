@@ -17,7 +17,7 @@
     ignore_errors: true
 
   - name: Build the client-jaas-testing.conf in the output directory
-    template: src=../templates/client-jaas-testing.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-client-jaas-testing.conf
+    template: src=../templates/client-jaas/client-jaas-testing.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-client-jaas-testing.conf
 
   - name: Get Broker-TLS endpoint for client testing
     shell: dcos beta-confluent-kafka --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-beta-confluent-kafka endpoint broker-tls | jq -r .dns[0] | paste -sd, -
@@ -25,13 +25,13 @@
     failed_when: "'error' in broker_tls_endpoint.stderr"
 
   - name: Build the Docker Kafka client testing shell script
-    template: src=../templates/docker-kafka-client.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh
+    template: src=../templates/other/docker-kafka-client.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh
 
   - name: Build the Producer test shell script
-    template: src=../templates/kafka-console-producer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh
+    template: src=../templates/other/kafka-console-producer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh
 
   - name: Build the Consumer test shell script
-    template: src=../templates/kafka-console-consumer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh
+    template: src=../templates/other/kafka-console-consumer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh
 
   - name: Set execute on the Docker Kafka client testing shell script
     file:
@@ -100,13 +100,13 @@
     command: scp ../output/cert/truststore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
 
   - name: Build the REST Proxy client test script in the output directory
-    template: src=../templates/rest-proxy-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh
+    template: src=../templates/other/rest-proxy-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh
 
   - name: SCP the REST Proxy client test script to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
 
   - name: Build the Schema Registry client test script in the output directory
-    template: src=../templates/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh
+    template: src=../templates/other/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh
 
   - name: SCP the Schema Registry client test script to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/

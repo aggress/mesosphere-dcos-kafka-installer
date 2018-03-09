@@ -15,5 +15,5 @@
     when: package == "confluent-connect-x" or package == "confluent-control-center-x" or package == "confluent-rest-proxy-x"
 
   - name: Build {{ package }} with all the security options JSON
-    template: src=../templates/{{ package }}.json-strict-secure.j2 dest=../output/options/{{ kafka_cluster_identifier }}-{{ package }}.json
+    template: src=../templates/options/{{ package }}.json-strict-secure.j2 dest=../output/options/{{ kafka_cluster_identifier }}-{{ package }}.json
     when: all_the_security == true
