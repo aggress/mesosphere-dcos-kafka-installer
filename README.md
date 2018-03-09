@@ -9,32 +9,32 @@ Ansible based installer for Kafka & Confluent Platform on DC/OS
 
 ## Features
 
-- Deploys Confluent Platform Kafka with Active Directory/Kerberos, TLS/SSL authentication
-- Supports deployment of multiple Kafka clusters for multi-tenant environments
-- DC/OS group/folder support for organising clusters such as /dev/123456-kafka/
-- DC/OS strict mode security out of the box
-- Deployment of an Active Directory server on AWS for testing
-- Dynamic generation of:
- - a batch script to add Active Directory users, principals and generate keytabs
- - options.json configs for every service
- - client-jass.conf for every service
- - Endpoint dependencies for each service
-- Autmation of:
- - generating and adding binary and text secrets to the DC/OS secret store
- - configuring DC/OS security service accounts and ACLs
-- Menu system to wrap the Ansible playbooks using GNU make
-- Janitor cleanup with one command
-- End to end client testing scripts with documented steps
-- Easy access to Confluent Control Center
+* Deploys Confluent Platform Kafka with Active Directory/Kerberos, TLS/SSL authentication
+* Supports deployment of multiple Kafka clusters for multi-tenant environments
+* DC/OS group/folder support for organising clusters such as /dev/123456-kafka/
+* DC/OS strict mode security out of the box
+* Deployment of an Active Directory server on AWS for testing
+* Dynamic generation of:
+  * a batch script to add Active Directory users, principals and generate keytabs
+  * options.json configs for every service
+  * client-jass.conf for every service
+  * endpoint dependencies for each service
+* Autmation of:
+  * generating and adding binary and text secrets to the DC/OS secret store
+  * configuring DC/OS security service accounts and ACLs
+* Menu system to wrap the Ansible playbooks using GNU make
+* Janitor cleanup with one command
+* End to end client testing scripts with documented steps
+* Easy access to Confluent Control Center
 
 ## Planned Features
 
-- Endpoint management
-- Configurable resources for JSON options
-- Apache Kafka support
-- DC/OS permissive and disabled security modes
-- MIT Kerberos support
-- Standalone monitoring deployment integrated with dcos-metrics
+* Endpoint management
+* Configurable resources for JSON options
+* Apache Kafka support
+* DC/OS permissive and disabled security modes
+* MIT Kerberos support
+* Standalone monitoring deployment integrated with dcos-metrics
 
 ## Design
 
@@ -42,19 +42,19 @@ Ansible does the heavy lifting, talking over localhost, directly to the DC/OS CL
 
 Why use this?
 
-- You're running a multi-tenant / private cloud environment based on DC/OS where you want to deploy multiple Confluent Platform Kafka clusters
-- You want to test the full Confluent Platform stack with all security features enabled
-- You want a convenient testing framework to validate the components are working correctly
-- You don't want to run through >50 manual steps
+* You're running a multi-tenant / private cloud environment based on DC/OS where you want to deploy multiple Confluent Platform Kafka clusters
+* You want to test the full Confluent Platform stack with all security features enabled
+* You want a convenient testing framework to validate the components are working correctly
+* You don't want to run through >50 manual steps
 
 ## Documentation
 
-- [Setup](docs/setup.md)
-- [Active Directory](docs/active_directory.md)
-- [Usage](docs/usage.md)
-- [Client Testing](docs/client_testing.md)
-- [Schema Registry Testing](docs/schema_registry_testing.md)
-- [REST Proxy Testing](docs/rest_proxy_testing.md)
-- [Connect Testing](docs/connect_testing.md)
-- [Control Center Testing](docs/control_center_testing.md)
-- TODO [Troubleshooting](docs/troubleshooting.md)
+* [Setup](docs/setup.md)
+* [Active Directory](docs/active_directory.md)
+* [Usage](docs/usage.md)
+* [Client Testing](docs/client_testing.md)
+* [Schema Registry Testing](docs/schema_registry_testing.md)
+* [REST Proxy Testing](docs/rest_proxy_testing.md)
+* [Connect Testing](docs/connect_testing.md)
+* [Control Center Testing](docs/control_center_testing.md)
+* TODO [Troubleshooting](docs/troubleshooting.md)
