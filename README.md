@@ -30,6 +30,7 @@ An Ansible based installer for Kafka & [Confluent Platform](https://www.confluen
 ## Planned Features
 
 * DC/OS 1.11 support
+* CCM support
 * Endpoint management
 * Configurable resources for JSON options
 * Apache Kafka support
