@@ -17,7 +17,7 @@ An Ansible based installer for Kafka & [Confluent Platform](https://www.confluen
   * options.json configs for every service
   * client-jass.conf for every service
   * endpoint dependencies for each service
-* Autmation of:
+* Automation of:
   * generating and adding binary and text secrets to the DC/OS secret store
   * configuring DC/OS security service accounts and ACLs
 * Menu system to wrap the Ansible playbooks using GNU make
@@ -42,7 +42,7 @@ Ansible does the heavy lifting, talking over localhost, directly to the DC/OS CL
 Why use this?
 
 * You're running a multi-tenant / private cloud environment based on DC/OS where you want to deploy multiple Confluent Platform Kafka clusters
-* You want to test the full Confluent Platform stack with all security features enabled
+* You want to test the full Confluent Platform stack on a DC/OS strict mode cluster with all security features enabled
 * You want a convenient testing framework to validate the components are working correctly
 * You don't want to run through >50 manual steps
 
