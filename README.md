@@ -1,7 +1,9 @@
 
 # Mesosphere DC/OS Kafka Installer
 
-An Ansible based installer for Kafka & [Confluent Platform](https://www.confluent.io/product/confluent-platform/) on DC/OS
+![Support DC/OS Version](https://img.shields.io/badge/Supported%20on%20DC/OS-1.10-7d58ff.svg?longCache=true&style=flat-square)
+
+An Ansible based installer for Kafka & [Confluent Platform](https://www.confluent.io/product/confluent-platform/) on [DC/OS](https://mesosphere.com/product/)
 
 ![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-kafka-installer/master/docs/make-screenshot.png)
 
