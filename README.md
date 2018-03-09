@@ -1,15 +1,13 @@
 
-# Kafka Installer For Mesosphere DC/OS
+# Mesosphere DC/OS Kafka Installer
 
-WORK IN PROGRESS
-
-Ansible based installer for Kafka & Confluent Platform on DC/OS
+An Ansible based installer for Kafka & [Confluent Platform](https://www.confluent.io/product/confluent-platform/) on DC/OS
 
 ![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-kafka-installer/master/docs/make-screenshot.png)
 
 ## Features
 
-* Deploys Confluent Platform Kafka with Active Directory/Kerberos, TLS/SSL authentication
+* Deploys Confluent Platform Kafka with full security - Active Directory/Kerberos GSSAPI & SASL_SSL authentication
 * Supports deployment of multiple Kafka clusters for multi-tenant environments
 * DC/OS group/folder support for organising clusters such as /dev/123456-kafka/
 * DC/OS strict mode security out of the box
@@ -35,6 +33,7 @@ Ansible based installer for Kafka & Confluent Platform on DC/OS
 * DC/OS permissive and disabled security modes
 * MIT Kerberos support
 * Standalone monitoring deployment integrated with dcos-metrics
+* Performance benchmarking
 
 ## Design
 
