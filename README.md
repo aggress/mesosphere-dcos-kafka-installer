@@ -1,35 +1,51 @@
 
-# SMACK Stack Installer For Mesosphere DC/OS
+# Kafka Installer For Mesosphere DC/OS
 
 WORK IN PROGRESS
 
-Ansible based installer for Big Data frameworks on DC/OS.
+Ansible based installer for Kafka & Confluent Platform on DC/OS
 
-![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-smack-installer/master/docs/make-screenshot.png)
+![screenshot](https://raw.githubusercontent.com/aggress/mesosphere-dcos-kafka-installer/master/docs/make-screenshot.png)
 
 ## Features
 
-- Deploys Confluent Platform with Active Directory/Kerberos and TLS
-- Supports distinct naming of each cluster for multi-tenancy
-- Folder support
-- DC/OS Strict mode
+- Deploys Confluent Platform Kafka with Active Directory/Kerberos, TLS/SSL authentication
+- Supports deployment of multiple Kafka clusters for multi-tenant environments
+- DC/OS group/folder support for organising clusters such as /dev/123456-kafka/
+- DC/OS strict mode security out of the box
 - Deployment of an Active Directory server on AWS for testing
-- Generation of AD users, principals and keytabs, configs
-- Generated templates for JSON options
-- Makefile support for menuing(thank you for the tip @jrx)
-- Janitor cleanup
-- End to end client testing - reading and writing data
+- Dynamic generation of:
+ - a batch script to add Active Directory users, principals and generate keytabs
+ - options.json configs for every service
+ - client-jass.conf for every service
+ - Endpoint dependencies for each service
+- Autmation of:
+ - generating and adding binary and text secrets to the DC/OS secret store
+ - configuring DC/OS security service accounts and ACLs
+- Menu system to wrap the Ansible playbooks using GNU make
+- Janitor cleanup with one command
+- End to end client testing scripts with documented steps
+- Easy access to Confluent Control Center
 
 ## Planned Features
 
+- Endpoint management
 - Configurable resources for JSON options
-- Apache Kafka, Cassandra, DSE
-- MIT Kerberos testing environment
+- Apache Kafka support
+- DC/OS permissive and disabled security modes
+- MIT Kerberos support
 - Standalone monitoring deployment integrated with dcos-metrics
 
 ## Design
 
-Ansible does the heavy lifting and talks over localhost directly to the DC/OS CLI which then deploys frameworks. Really, all this is doing is automating all the steps you'd need to perform manually.
+Ansible does the heavy lifting, talking over localhost, directly to the DC/OS CLI. Really, all this is doing is automating the manual process.
+
+Why use this?
+
+- You're running a multi-tenant / private cloud environment based on DC/OS where you want to deploy multiple Confluent Platform Kafka clusters
+- You want to test the full Confluent Platform stack with all security features enabled
+- You want a convenient testing framework to validate the components are working correctly
+- You don't want to run through >50 manual steps
 
 ## Documentation
 
