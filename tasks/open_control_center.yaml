@@ -14,8 +14,13 @@
     shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
     register: dcos_master
 
-  - name: Open the SSH tunnel
-    shell: ssh -fN -L 9022:{{ c3_host.stdout }}:{{ c3_port.stdout }} {{ ssh_user }}@{{ dcos_master.stdout }}
+  - name: Register a random local port for the SSH tunnel
+    shell: echo {{ 9100 |random(9000, 1) }}
+    register: tunnel_port
+
+  - name: Open the SSH tunnel for AWS testing
+    shell: ssh -fN -L {{ tunnel_port.stdout }}:{{ c3_host.stdout }}:{{ c3_port.stdout }} {{ ssh_user }}@{{ dcos_master.stdout }}
+    when: on_aws == true
 
   - name: Open Control Center in browser
-    shell: open https://127.0.0.1:9022
+    shell: open https://127.0.0.1:{{ tunnel_port.stdout }}
