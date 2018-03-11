@@ -9,9 +9,15 @@ Change to the project directory
 cd mesosphere-dcos-smack-installer
 ```
 
-Edit `group_vars/all` which contains a list of configuration options you must setup before moving forwards.
+Edit `group_vars/all` to set the following:
 
-You must have the following: ad_hostname, ad_user_password, realm, ssh_user, ec2_keypair
+* `ad_hostname` - The hostname of your Active Directory server
+* `ad_user_password` - Required for testing
+* `realm` - Required for Kerberos principals
+* `ssh_user` - The user used to SSH to DC/OS masters, used to setup client testing
+* `ec2_keypair` - Used to deploy a test Active Directory server
+* `service_group` - The DC/OS folder to install the Kafka cluster into
+* `kafka_cluster_identifier` - A 6 digit numeric identifier for the cluster
 
 ## Configure the DC/OS CLI to attach to your target cluster 
 
@@ -19,16 +25,19 @@ You must have the following: ad_hostname, ad_user_password, realm, ssh_user, ec2
 dcos cluster setup --insecure <master_ip> --username=<username>
 ```
 
-## Test the DC/OS cli `dcos node`
+Test the DC/OS cli `dcos node`
 
 Run `make` with no options to review the options.
+
+
+## Active Directory / Kerberos create keytabs
 
 If you need a test AD server, please read [Active Directory](https://github.com/aggress/mesosphere-dcos-smack-installer/blob/master/docs/activedirectory.md) first, then spin up AD with:
 ```
 make ad-deploy  
 ```
 
-Whether you're using a test AD server or a corporate one, you now need to create the batch script which automates the user, principal, keytab creation.
+Whether you're using a test AD server or a corporate one, you now need to create the batch script which automates and documents the user, principal, keytab creation.
 
 ```
 make ad-keytabs-bat
@@ -68,3 +77,20 @@ Or go crazy
 ```
 make install-cp-stack
 ```
+
+## Archive all assets
+
+After the deployment of a stack, archive all assets - option.jsons, certs, keytabs etc
+```
+make archive
+```
+
+This will create an archive directory in output/archive, copy over all the assets from `output/{certs,keytabs,options,other}` and remove them from those directories, ready for a fresh deployment.
+
+
+## Deploy a second stack
+
+Edit group_vars/all and change the `kafka_cluster_identifier`
+
+Now repeat from Active Directory / Kerberos create keytabs
+

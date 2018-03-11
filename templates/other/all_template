@@ -20,7 +20,7 @@ kafka_cluster_identifier: 123456
 # Kerberos
 #################### 
 
-# AD hostname: If this is AD on AWS for testing, will require the public DNS name
+# Active Directory hostname: If this is AD on AWS for testing, will require the public DNS name
 ad_hostname:
 
 # AD user password: For testing purposes these can all be the same
@@ -40,7 +40,7 @@ beta_or_ga: beta-confluent
 
 
 #################### 
-# AWS CloudFormation Active Directory Specific Paramters
+# TESTING: AWS CloudFormation Active Directory Specific Paramters
 #################### 
 
 # AD DomainNetBIOSName
@@ -73,6 +73,8 @@ community_packages: [ 'confluent-schema-registry-x', 'confluent-rest-proxy-x', '
 primaries: [ 'schema', 'rest', 'connect', 'control' ]
 
 packages: [ 'confluent-kafka-zookeeper', 'confluent-kafka', 'confluent-connect', 'confluent-schema-registry', 'confluent-replicator', 'confluent-control-center' ]
+
+folders: [ 'cert', 'keytabs', 'options', 'other']
 
 ##### NOT USED YET
 

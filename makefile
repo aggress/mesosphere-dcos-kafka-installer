@@ -5,7 +5,7 @@ blah = "test"
 
 .DEFAULT_GOAL := help
 
-.PHONY: addup addown help clean
+.PHONY: addup addown help clean testing
 
 help:
 	@echo ""
@@ -23,6 +23,8 @@ help:
 	@echo "  clean                  Remove existing build artifacts"
 	@echo "  janitor                Run Janitor to clean up reservations, roles and principals"
 	@echo "  open-control-center    Tunnel and open Control Center in your browswer"
+	@echo "  archive                Archive all assets before deploying a new cluster"
+	@echo "  testing                Testing menu"
 	@echo ""
 	@echo "== I n s t a l l ========"
 	@echo ""
@@ -34,13 +36,16 @@ help:
 	@echo "  install-cp-control     Install Confluent Control Center"
 	@echo "  install-cp-full-stack  Install Confluent Platform Full Stack"
 	@echo ""
+
+testing:
+	@echo ""
 	@echo "== Testing ============"
 	@echo ""
-	@echo "  install-ad             Deploy an Active Directory server on AWS"
+	@echo "  deploy-ad             Deploy an Active Directory server on AWS"
 	@echo "  get-ad-facts           Get the public DNS name and Administrator password for the AD server on AWS"
 	@echo "  destroy-ad             Destroy the AWS Active Directory server"
 	@echo "  client-test            Send creds and configs to a master for client-server testing"
-	@echo "  install-dcos           Terraform and build a DC/OS cluster using Ansible"
+	@echo "  deploy-dcos           Terraform and build a DC/OS cluster using Ansible"
 	@echo "  destroy-dcos           Destroy the DC/OS test environment"
 	@echo ""
 
@@ -140,7 +145,7 @@ janitor:
 open-control-center:
 	ansible-playbook -i hosts tasks/open_control_center.yaml
 
-install-dcos:
+deploy-dcos:
 	cd ~/code/terraform-ansible-dcos; \
 	  terraform init; \
 	  terraform get; \
