@@ -60,4 +60,5 @@ Why use this?
 * [REST Proxy Testing](docs/rest_proxy_testing.md)
 * [Connect Testing](docs/connect_testing.md)
 * [Control Center Testing](docs/control_center_testing.md)
+* [DC/OS build for testing](docs/dcos_build.md)
 * TODO [Troubleshooting](docs/troubleshooting.md)
