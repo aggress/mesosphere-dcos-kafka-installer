@@ -48,3 +48,10 @@ Now I've been using xfreerdp but it requires Quartz and a reboot
 brew cask install xfreerdp
 ```
 The alternative is to install [Microsoft Remote Desktop 10](https://itunes.apple.com/gb/app/microsoft-remote-desktop-10/id1295203466?mt=12) from the app store which also works fine.
+
+## DC/OS Requirements
+
+Requires a DC/OS 1.10 cluster with the following:
+
+* Strict mode
+* SSH access to a master if client testing is required

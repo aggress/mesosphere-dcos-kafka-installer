@@ -12,7 +12,7 @@ An Ansible based installer for Kafka & [Confluent Platform](https://www.confluen
 * Deploys Confluent Platform Kafka with full security - Active Directory/Kerberos GSSAPI & SASL_SSL authentication
 * Supports deployment of multiple Kafka clusters for multi-tenant environments
 * DC/OS group/folder support for organising clusters such as /dev/123456-kafka/
-* DC/OS strict mode security out of the box
+* DC/OS strict mode security out of the box (only strict at this time)
 * Deployment of an Active Directory server on AWS for testing
 * Dynamic generation of:
   * a batch script to add Active Directory users, principals and generate keytabs
@@ -26,6 +26,7 @@ An Ansible based installer for Kafka & [Confluent Platform](https://www.confluen
 * Janitor cleanup with one command
 * End to end client testing scripts with documented steps
 * Easy access to Confluent Control Center
+* Archive of each cluster's configuration assets
 
 ## Planned Features
 
@@ -43,12 +44,17 @@ An Ansible based installer for Kafka & [Confluent Platform](https://www.confluen
 
 * DC/OS 1.10 only
 * Strict mode only
+* Cluster identifier limited to 9 chars due to Active Directory Kerberos naming limitations
+* Confluent Connect does not provide security on its REST API endpoint, this is a limitation in the Confluent product
+* External (to DC/OS ) service discovery is work in progress
 
 ## Design
 
-Ansible does the heavy lifting, talking over localhost, directly to the DC/OS CLI. Really, all this is doing is automating the manual process.
+Ansible does the heavy lifting, talking over localhost, to generate configuration files based on templates and talking directly to the DC/OS CLI to manage the deployment.
 
-Why use this?
+Really, all this is doing is automating the manual process and myriad of configurations required.
+
+## Why use this?
 
 * You're running a multi-tenant / private cloud environment based on DC/OS where you want to deploy multiple Confluent Platform Kafka clusters
 * You want to test the full Confluent Platform stack on a DC/OS strict mode cluster with all security features enabled
