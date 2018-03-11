@@ -39,6 +39,11 @@ An Ansible based installer for Kafka & [Confluent Platform](https://www.confluen
 * Standalone monitoring deployment integrated with dcos-metrics
 * Performance benchmarking
 
+## Limitations
+
+* DC/OS 1.10 only
+* Strict mode only
+
 ## Design
 
 Ansible does the heavy lifting, talking over localhost, directly to the DC/OS CLI. Really, all this is doing is automating the manual process.
