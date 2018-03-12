@@ -40,9 +40,12 @@ This has been patched by Mesosphere and ships in the Docker container used, but 
 ./patch_zookeeper.sh
 ```
 
-## Create test topics - TODO
+## Test topics
+
+We'll want create a test topic for later testing and show we can list topics
+
 ```
-./<kafka_cluster_identifier>-create-test-topics.sh
+./<kafka_cluster_identifier>-kafka-topic-test.sh
 ```
 
 ## Produce and consume messages
