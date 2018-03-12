@@ -147,6 +147,9 @@ janitor:
 open-control-center:
 	ansible-playbook -i hosts tasks/open_control_center.yaml
 
+archive:
+	ansible-playbook -i hosts tasks/archive.yaml
+
 deploy-dcos:
 	cd ~/code/terraform-ansible-dcos; \
 	  terraform init; \
