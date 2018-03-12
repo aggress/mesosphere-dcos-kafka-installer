@@ -3,14 +3,15 @@
   connection: local
   tasks:
   - name: Create the archive dirs
-    file : ../output/archive/{{ kafka_cluster_identifier }}-kafka/{{ item }}
-    state: directory
-    with items: "{{ folders }}"
+    file: 
+      path: ../output/archive/{{ kafka_cluster_identifier }}-kafka/{{ item }}
+      state: directory
+    with_items: "{{ folders }}"
 
   - name: Archiving previously generated assets into ../output/archive/{{ kafka_cluster_identifier }}-kafka
     shell: cp ../output/{{ item }}/* ../output/archive/{{ kafka_cluster_identifier }}-kafka/{{ item }}/
-    with items: "{{ folders }}"
+    with_items: "{{ folders }}"
 
   - name: Removing assests for {{ kafka_cluster_identifier }}-kafka from working directories
     shell: rm -f ../output/{{ item }}/*
-    with items: "{{ folders }}"
+    with_items: "{{ folders }}"
