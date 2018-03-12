@@ -25,6 +25,21 @@ cd /tmp/kafkatest
 
 In this directory are a number of testing shell scripts, along with all the files required for authenticating with Kafka over SASL_GSSAPI.
 
+
+## Zookeeper Patch
+
+Confluent have not yet shipped a patch to fix https://issues.apache.org/jira/browse/ZOOKEEPER-2184 which breaks Kafka clients connecting to Zookeper when in containers.
+
+Without the patch, Zookeeper performs a reverse DNS lookup on the IP of the container running the Kafka server component and returns that to the client to try to connect to.
+
+The address it resolves to will be the host of the containers, the client attempts to connect to this and fails.
+
+This has been patched by Mesosphere and ships in the Docker container used, but must be patched for Kafka clients connecting to Zookeeper specifically, like kafka-topics.  This does not affect Kafka clients talking direct to Brokers over bootstrap.servers.  To apply the patch, run
+
+```
+./patch_zookeeper.sh
+```
+
 ## Create test topics - TODO
 ```
 ./<kafka_cluster_identifier>-create-test-topics.sh
