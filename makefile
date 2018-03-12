@@ -37,7 +37,6 @@ help:
 	@echo "  install-cp-rest        Install Confluent REST Proxy"
 	@echo "  install-cp-connect     Install Confluent Connect"
 	@echo "  install-cp-control     Install Confluent Control Center"
-	@echo "  install-cp-full-stack  Install Confluent Platform Full Stack"
 	@echo ""
 
 testing:
