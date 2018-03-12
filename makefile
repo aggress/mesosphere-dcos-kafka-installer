@@ -1,6 +1,7 @@
 BUILDDIR = "output"
 kafka_cluster_identifier = $(shell grep kafka_cluster_identifier group_vars/all | awk '{print $2}')
 service_group = $(shell grep service_group group_vars/all | awk '{print $2}' | head -n1)
+dcos_cluster = $(shell dcos cluster list --attached | tail -n1)
 blah = "test"
 
 .DEFAULT_GOAL := help
@@ -12,6 +13,8 @@ help:
 	@echo "Please use \`make <target>' where <target> is one of:"
 	@echo ""
 	@echo "  Mesosphere DC/OS Kafka Installer:"
+	@echo ""
+	@echo "  $(dcos_cluster)"
 	@echo "  $(service_group)"
 	@echo "  $(kafka_cluster_identifier)"
 	@echo ""
@@ -41,11 +44,11 @@ testing:
 	@echo ""
 	@echo "== Testing ============"
 	@echo ""
-	@echo "  deploy-ad             Deploy an Active Directory server on AWS"
+	@echo "  deploy-ad              Deploy an Active Directory server on AWS"
 	@echo "  get-ad-facts           Get the public DNS name and Administrator password for the AD server on AWS"
 	@echo "  destroy-ad             Destroy the AWS Active Directory server"
-	@echo "  client-test            Send creds and configs to a master for client-server testing"
-	@echo "  deploy-dcos           Terraform and build a DC/OS cluster using Ansible"
+	@echo "  setup-client-test      Send creds and configs to a master for client-server testing"
+	@echo "  deploy-dcos            Terraform and build a DC/OS cluster using Ansible"
 	@echo "  destroy-dcos           Destroy the DC/OS test environment"
 	@echo ""
 
