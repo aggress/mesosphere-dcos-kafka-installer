@@ -24,6 +24,11 @@
     register: broker_tls_endpoint
     failed_when: "'error' in broker_tls_endpoint.stderr"
 
+  - name: Get Zookeeper endpoint for client testing
+    shell: dcos beta-confluent-kafka-zookeeper --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-beta-confluent-kafka-zookeeper endpoint clientport | jq -r .dns[0] | paste -sd, -
+    register: zookeeper_endpoint
+    failed_when: "'error' in zookeeper_endpoint.stderr"
+
   - name: Build the Docker Kafka client testing shell script
     template: src=../templates/other/docker-kafka-client.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh
 
@@ -32,6 +37,9 @@
 
   - name: Build the Consumer test shell script
     template: src=../templates/other/kafka-console-consumer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh
+
+  - name: Build the Topic test shell script
+    template: src=../templates/other/kafka-topic-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh
 
   - name: Set execute on the Docker Kafka client testing shell script
     file:
@@ -60,8 +68,11 @@
   - name: SCP the Consumer test shell script to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
 
-  - name: SCP the schema.keytab to the master
-    command: scp ../output/keytabs/{{ kafka_cluster_identifier}}-schema.keytab "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+  - name: SCP the Topic test shell script to the master
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+
+  - name: SCP the client.keytab to the master
+    command: scp ../output/keytabs/{{ kafka_cluster_identifier}}-clients.keytab "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
 
   - name: SCP the client-jaas-testing.conf to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-client-jaas-testing.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
@@ -111,7 +122,13 @@
   - name: SCP the Schema Registry client test script to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
 
+  - name: Get the patched Zookeeper JAR for https://issues.apache.org/jira/browse/ZOOKEEPER-2184
+    get_url:
+      url: http://downloads.mesosphere.com/kafka/assets/zookeeper-3.4.10.1.jar
+      dest: ../templates/other/zookeeper-3.4.10.1.jar
 
+  - name: SCP the patched Zookeepeer JAR to the master
+    command: scp ../templates/other/zookeeper-3.4.10.1.jar "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
 
-
-
+  - name: SCP the Zookeeper patch script to the master
+    command: scp ../templates/other/patch_zookeeper.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/

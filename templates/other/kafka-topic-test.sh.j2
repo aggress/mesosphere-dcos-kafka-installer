@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -o xtrace
+
+# Create a test topic for us to use - testingtopic
+
+kafka-topics --zookeeper {{ zookeeper_endpoint.stdout }} --create --topic testingtopic --replication-factor 3 --partitions 3
+
+# List all topics
+
+kafka-topics --zookeeper {{ zookeeper_endpoint.stdout }} --list

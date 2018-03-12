@@ -2,18 +2,18 @@ KafkaClient {
     com.sun.security.auth.module.Krb5LoginModule required
     doNotPrompt=true
     useTicketCache=false
-    principal="schema/schema.mesosphere.com@{{ realm|upper }}"
+    principal="client/client.mesosphere.com@{{ realm|upper }}"
     useKeyTab=true
     serviceName="kafka"
-    keyTab="/tmp/kafkatest/999999-schema.keytab";
+    keyTab="/tmp/kafkatest/999999-clients.keytab";
 };
 
 Client {
     com.sun.security.auth.module.Krb5LoginModule required
     doNotPrompt=true
     useTicketCache=false
-    principal="schema/schema.mesosphere.com@{{ realm|upper }}"
+    principal="client/client.mesosphere.com@{{ realm|upper }}"
     useKeyTab=true
     serviceName="kafka"
-    keyTab="/tmp/kafkatest/999999-schema.keytab";
+    keyTab="/tmp/kafkatest/999999-clients.keytab";
 };
