@@ -6,6 +6,10 @@
     template: src=../templates/other/active_directory_cloudformation_template.json.j2 dest=../output/other/active_directory_cloudformation_template.json
     when: ad_action == "deploy"
 
+  - name: Build the Windows OpenSSH batch script
+    template: src=../templates/other/windows_install_openssh.bat.j2 dest=../output/other/windows_install_openssh.bat
+    when: ad_action == "deploy"
+
   - name: Launch Active Directory CloudFormation Stack
     cloudformation:
       stack_name: "Active-Directory-{{ ansible_user_id }}"
