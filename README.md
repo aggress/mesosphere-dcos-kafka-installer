@@ -72,4 +72,4 @@ Really, all this is doing is automating the manual process and myriad of configu
 * [Connect Testing](docs/connect_testing.md)
 * [Control Center Testing](docs/control_center_testing.md)
 * [DC/OS build for testing](docs/dcos_build.md)
-* TODO [Troubleshooting](docs/troubleshooting.md)
+* [Troubleshooting](docs/troubleshooting.md)

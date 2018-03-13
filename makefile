@@ -20,7 +20,8 @@ help:
 	@echo ""
 	@echo "== Admin ============"
 	@echo ""
-	@echo "  build-keytabs-bat      Configure the batch script to generate AD keytabs"	
+	@echo "  build-keytabs-bat      Configure the batch script to generate AD keytabs"
+	@echo "  get-keytabs            SSH to Active Directory, generate and retrieve the keytabs"
 	@echo "  run-setup              One-time setup for l4lb cert, keytabs, krb5, client-jaas, aux-universe"
 	@echo "  destroy-full-stack     Delete a full cp stack"
 	@echo "  clean                  Remove existing build artifacts"
@@ -54,6 +55,9 @@ testing:
 
 build-keytabs-bat:
 	ansible-playbook -i hosts tasks/build_ad_keytabs.yaml
+
+build-keytabs-bat:
+	ansible-playbook -i hosts tasks/active_directory_over_ssh.yaml
 
 run-setup:
 	ansible-playbook -i hosts tasks/check_dcos_enterprise_cli.yaml
@@ -159,6 +163,7 @@ deploy-dcos:
 	  bash ansibilize.sh
 	cd ~/code/dcos-ansible ;\
 	  ansible-playbook -i hosts -u centos -b main.yaml
+	  sleep 60
 	  dcos cluster setup --insecure $(shell grep masters -A 1 ~/code/dcos-ansible/hosts | tail -n1)
 
 destroy-dcos:

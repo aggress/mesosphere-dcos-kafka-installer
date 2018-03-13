@@ -7,7 +7,7 @@
     when: ad_action == "deploy"
 
   - name: Build the Windows OpenSSH batch script
-    template: src=../templates/other/windows_install_openssh.bat.j2 dest=../output/other/windows_install_openssh.bat
+    template: src=../templates/other/windows-install-openssh.ps1.j2 dest=../output/other/windows-install-openssh.ps1
     when: ad_action == "deploy"
 
   - name: Launch Active Directory CloudFormation Stack
@@ -27,10 +27,6 @@
       disable_rollback: true
       template: "../output/other/active_directory_cloudformation_template.json"
     when: ad_action == "destroy"
-
-  - name: Build the OpenSSH batch file
-    template: src=../templates/other/windows_install_openssh.bat.j2 dest=../output/keytabs/windows_install_openssh.bat
-    when: ad_action == "deploy"
 
   - name: Get the EC2 instance ID
     ec2_instance_facts:
