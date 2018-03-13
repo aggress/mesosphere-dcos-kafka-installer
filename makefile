@@ -56,7 +56,7 @@ testing:
 build-keytabs-bat:
 	ansible-playbook -i hosts tasks/build_ad_keytabs.yaml
 
-build-keytabs-bat:
+get-keytabs:
 	ansible-playbook -i hosts tasks/active_directory_over_ssh.yaml
 
 run-setup:
