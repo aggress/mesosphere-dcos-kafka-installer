@@ -23,8 +23,11 @@ kafka_cluster_identifier: 123456
 # Active Directory hostname: If this is AD on AWS for testing, will require the public DNS name
 ad_hostname:
 
-# AD user password: For testing purposes these can all be the same
+# Active Directory user password: For testing purposes these can all be the same
 ad_user_password: 
+
+# Active Directory Path for user creation: OU=beta,OU=alpha,DC=ad,DC=mesosphere,DC=com
+ad_path: OU=beta,OU=alpha,DC=ad,DC=mesosphere,DC=com
 
 # Kerberos Realm
 realm:
