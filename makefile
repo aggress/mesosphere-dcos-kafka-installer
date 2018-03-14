@@ -20,7 +20,7 @@ help:
 	@echo ""
 	@echo "== Admin ============"
 	@echo ""
-	@echo "  build-keytabs-bat      Configure the batch script to generate AD keytabs"
+	@echo "  build-keytabs-script   Configure the powershell script to generate AD keytabs"
 	@echo "  get-keytabs            SSH to Active Directory, generate and retrieve the keytabs"
 	@echo "  run-setup              One-time setup for l4lb cert, keytabs, krb5, client-jaas, aux-universe"
 	@echo "  destroy-full-stack     Delete a full cp stack"
