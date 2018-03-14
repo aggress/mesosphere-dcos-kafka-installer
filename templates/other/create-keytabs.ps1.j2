@@ -3,7 +3,7 @@
 
 ## Create a generic password
 
-$password = "Start12345" | ConvertTo-SecureString -AsPlainText -Force
+$password = "{{ ad_user_password }}" | ConvertTo-SecureString -AsPlainText -Force
 
 $array = @("kafka-zk0", "kafka-zk1", "kafka-zk2", "kafka-br0", "kafka-br1", "kafka-br2", "kafka-sr", "kafka-rp", "kafka-co", "kafka-cc", "kafka-cl")
 foreach ($element in $array) {
