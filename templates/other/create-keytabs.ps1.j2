@@ -39,3 +39,11 @@ ktpass.exe /princ connect/connect-1-server.{{ service_group }}{{ kafka_cluster_i
 ktpass.exe /princ control/control-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-control-center-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-cc@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-control-center-x.keytab
 
 ktpass.exe /princ client/client.mesosphere.com@{{ realm }} /mapuser {{ kafka_cluster_identifier }}-kafka-cl@{{ realm|upper }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-clients.keytab
+
+
+## Delete superfluous keytabs
+
+$keyarray = @("brokers-0.keytab", "brokers-1.keytab", "zk-0.keytab", "zk-1.keytab")
+foreach ($element in $keyarray) {
+    del $element
+}
