@@ -2,5 +2,8 @@
 - hosts: localhost
   connection: local
   tasks:
-  - name: Build the create_keytabs batch script in the output directory
-    template: src=../templates/other/create_keytabs.bat.j2 dest=../output/keytabs/create-keytabs.bat
+  - name: Build the create-keytabs batch script in the output directory
+    template: src=../templates/other/create-keytabs.bat.j2 dest=../output/keytabs/create-keytabs.bat
+
+  - name: Build the create_keytabs powershell script in the output directory
+    template: src=../templates/other/create-keytabs.ps1.j2 dest=../output/keytabs/create-keytabs.ps1

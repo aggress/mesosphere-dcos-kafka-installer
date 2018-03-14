@@ -1,0 +1,41 @@
+
+## Adds Active Directory users, maps relevant principals and creates required keytabs
+
+## Create a generic password
+
+$password = "Start12345" | ConvertTo-SecureString -AsPlainText -Force
+
+$array = @("kafka-zk0", "kafka-zk1", "kafka-zk2", "kafka-br0", "kafka-br1", "kafka-br2", "kafka-sr", "kafka-rp", "kafka-co", "kafka-cc", "kafka-cl")
+foreach ($element in $array) {
+    New-ADUser -Name {{ kafka_cluster_identifier }}-$element -Path "{{ ad_path }}" -AccountPassword $Password -Enabled $True -PasswordNeverExpire $True
+}
+
+## Map the Kafka Broker principals to each user
+  
+ktpass.exe /princ kafka/kafka-0-broker.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-br0@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out brokers-0.keytab
+
+ktpass.exe /in brokers-0.keytab /princ kafka/kafka-1-broker.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-br1@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out brokers-1.keytab
+
+ktpass.exe /in brokers-1.keytab /princ kafka/kafka-2-broker.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-br2@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.keytab
+
+
+## Map the Kafka Zookeeper principals to each user
+
+ktpass.exe /princ zookeeper/zookeeper-0-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-zk0@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out zk-0.keytab
+
+ktpass.exe /in zk-0.keytab /princ zookeeper/zookeeper-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-zk1@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out zk-1.keytab
+
+ktpass.exe /in zk-1.keytab /princ zookeeper/zookeeper-2-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.autoip.dcos.thisdcos.directory@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-zk2@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka-zookeeper.keytab
+
+
+## Map the principals for Schema Registry, Rest Proxy, Connect, Control Center and one for Client testing
+
+ktpass.exe /princ schema/schema-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-sr@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-schema-registry-x.keytab
+
+ktpass.exe /princ rest/rest-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-rp@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-rest-proxy-x.keytab
+
+ktpass.exe /princ connect/connect-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-connect-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-co@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-connect-x.keytab
+
+ktpass.exe /princ control/control-1-server.{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-control-center-x.mesosphere.com@{{ realm|upper }} /mapuser {{ kafka_cluster_identifier }}-kafka-cc@{{ realm }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-confluent-control-center-x.keytab
+
+ktpass.exe /princ client/client.mesosphere.com@{{ realm }} /mapuser {{ kafka_cluster_identifier }}-kafka-cl@{{ realm|upper }} /ptype KRB5_NT_PRINCIPAL /pass {{ ad_user_password }} /out {{ kafka_cluster_identifier }}-clients.keytab
