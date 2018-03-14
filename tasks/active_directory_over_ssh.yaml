@@ -8,10 +8,10 @@
   - name: Remove any existing keytabs
     shell: ssh Administrator@{{ ad_hostname }} del C:\\Users\\Administrator\\*.keytab
 
-  - name: SCP the create_keytabs.bat to the Active Directory server
+  - name: SCP the create-keytabs.bat to the Active Directory server
     shell: scp ../output/keytabs/create-keytabs.bat Administrator@{{ ad_hostname }}:/C:\\Users\\Administrator
 
-  - name: Run the create_keytabs.bat to add credentials
+  - name: Run the create-keytabs.bat to add credentials
     shell: ssh Administrator@{{ ad_hostname }} powershell C:\\Users\\Administrator\\create-keytabs.bat
 
   - name: SCP the keytabs back to localhost
@@ -19,3 +19,4 @@
     with_items: 
       - "{{ beta_packages }}"
       - clients
+  
