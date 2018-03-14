@@ -53,7 +53,7 @@ testing:
 	@echo ""
 
 
-build-keytabs-bat:
+build-keytabs-script:
 	ansible-playbook -i hosts tasks/build_ad_keytabs.yaml
 
 get-keytabs:
