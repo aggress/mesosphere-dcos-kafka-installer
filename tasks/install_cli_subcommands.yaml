@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Install dcos-enterprise-cli subcommand
+    command: dcos package install dcos-enterprise-cli --cli --yes
+
+  - name: Install beta-confluent-kafka-cli subcommand
+    command: dcos package install beta-confluent-kafka --cli --yes
+
+  - name: Install beta-confluent-kafka-zookeeper-cli subcommand
+    command: dcos package install beta-confluent-kafka-zookeeper --cli --yes

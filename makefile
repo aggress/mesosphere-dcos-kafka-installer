@@ -60,7 +60,7 @@ get-keytabs:
 	ansible-playbook -i hosts tasks/active_directory_over_ssh.yaml
 
 run-setup:
-	ansible-playbook -i hosts tasks/check_dcos_enterprise_cli.yaml
+	ansible-playbook -i hosts tasks/install_cli_subcommands.yaml
 	ansible-playbook -i hosts tasks/check_keytabs.yaml
 	rm -f $(BUILDDIR)/cert/*
 	ansible-playbook -i hosts tasks/deploy_l4lb_cert.yaml
