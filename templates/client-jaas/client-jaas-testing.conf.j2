@@ -5,7 +5,7 @@ KafkaClient {
     principal="client/client.{{ kafka_cluster_identifier }}-kafka.mesosphere.com@{{ realm|upper }}"
     useKeyTab=true
     serviceName="kafka"
-    keyTab="/tmp/kafkatest/{{ kafka_cluster_identifier }}-clients.keytab";
+    keyTab="/tmp/kafkatest/{{ kafka_cluster_identifier }}/{{ kafka_cluster_identifier }}-clients.keytab";
 };
 
 Client {
@@ -15,5 +15,5 @@ Client {
     principal="client/client.{{ kafka_cluster_identifier }}-kafka.mesosphere.com@{{ realm|upper }}"
     useKeyTab=true
     serviceName="kafka"
-    keyTab="/tmp/kafkatest/{{ kafka_cluster_identifier }}-clients.keytab";
+    keyTab="/tmp/kafkatest/{{ kafka_cluster_identifier }}/{{ kafka_cluster_identifier }}-clients.keytab";
 };

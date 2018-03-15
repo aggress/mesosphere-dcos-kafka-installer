@@ -1,7 +1,7 @@
 security.protocol=SASL_SSL
 sasl.mechanism=GSSAPI
 sasl.kerberos.service.name= kafka
-ssl.truststore.location = /tmp/kafkatest/truststore.jks
+ssl.truststore.location = /tmp/kafkatest/{{ kafka_cluster_identifier }}/truststore.jks
 ssl.truststore.password = changeit
-ssl.keystore.location = /tmp/kafkatest/keystore.jks
+ssl.keystore.location = /tmp/kafkatest/{{ kafka_cluster_identifier }}/keystore.jks
 ssl.keystore.password = changeit

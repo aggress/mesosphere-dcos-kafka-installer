@@ -42,7 +42,7 @@
     template: src=../templates/other/kafka-topic-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh
 
   - name: Create a temporary directory for the Kafka client configs
-    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" mkdir /tmp/kafkatest/{{ kafka_cluster_identifier }}
+    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" mkdir -p /tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Docker Kafka client testing shell script to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
@@ -115,11 +115,14 @@
       url: http://downloads.mesosphere.com/kafka/assets/zookeeper-3.4.10.1.jar
       dest: ../templates/other/zookeeper-3.4.10.1.jar
 
+  - name: Build the patch zookeeper script
+    template: src=../templates/other/patch_zookeeper.sh.j2 dest=../output/other/patch_zookeeper.sh
+
   - name: SCP the patched Zookeepeer JAR to the master
     command: scp ../templates/other/zookeeper-3.4.10.1.jar "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Zookeeper patch script to the master
-    command: scp ../templates/other/patch_zookeeper.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
+    command: scp ../output/other/patch_zookeeper.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: Set chmod +x on all the scripts
     shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" chmod +x /tmp/kafkatest/{{ kafka_cluster_identifier }}/*.sh
