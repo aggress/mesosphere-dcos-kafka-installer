@@ -6,14 +6,14 @@
     shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
     register: dcos_master
 
-  - name: Delete the existing truststore.jks as keytool will error, otherwise ignore
+  - name: Delete any existing truststore.jks as keytool will error, otherwise ignore
     file:
       path: ../output/cert/truststore.jks
       state: absent
     ignore_errors: true
 
-  - name: Delete any existing /tmp/kafkatest directory on the master, otherwise ignore
-    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" rm -rf /tmp/kafkatest
+  - name: Delete any existing /tmp/kafkatest/{{ kafka_cluster_identifier }} directory on the master, otherwise ignore
+    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" rm -rf /tmp/kafkatest/{{ kafka_cluster_identifier }}
     ignore_errors: true
 
   - name: Build the client-jaas-testing.conf in the output directory
@@ -41,47 +41,32 @@
   - name: Build the Topic test shell script
     template: src=../templates/other/kafka-topic-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh
 
-  - name: Set execute on the Docker Kafka client testing shell script
-    file:
-      path: ../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh
-      mode: 0755
-
-  - name: Set execute on the the producer test shell script
-    file:
-      path: ../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh
-      mode: 0755
-
-  - name: Set execute on the the consumer test shell script
-    file:
-      path: ../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh
-      mode: 0755
-
   - name: Create a temporary directory for the Kafka client configs
-    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" mkdir /tmp/kafkatest
+    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" mkdir /tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Docker Kafka client testing shell script to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Producer test shell script to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Consumer test shell script to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Topic test shell script to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the client.keytab to the master
-    command: scp ../output/keytabs/{{ kafka_cluster_identifier}}-clients.keytab "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/keytabs/{{ kafka_cluster_identifier}}-clients.keytab "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the client-jaas-testing.conf to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-client-jaas-testing.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-client-jaas-testing.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the client.properties to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-client.properties "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-client.properties "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the krb5.conf to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-krb5.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-krb5.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: Get the ca bundle back
     shell: curl -k -v $(dcos config show core.dcos_url)/ca/dcos-ca.crt -o ../output/cert/ca-bundle.crt
@@ -104,23 +89,26 @@
   - name: Create the truststore
     shell: keytool -import -noprompt -trustcacerts -alias root -file ../output/cert/ca-bundle.crt -storepass changeit -keystore ../output/cert/truststore.jks
 
+  - name: SCP the ca-bundle to the master
+    command: scp ../output/cert/ca-bundle.crt "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
+
   - name: SCP the keystore to the master
-    command: scp ../output/cert/keystore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/cert/keystore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the truststore to the master
-    command: scp ../output/cert/truststore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/cert/truststore.jks "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: Build the REST Proxy client test script in the output directory
     template: src=../templates/other/rest-proxy-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh
 
   - name: SCP the REST Proxy client test script to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: Build the Schema Registry client test script in the output directory
     template: src=../templates/other/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh
 
   - name: SCP the Schema Registry client test script to the master
-    command: scp ../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: Get the patched Zookeeper JAR for https://issues.apache.org/jira/browse/ZOOKEEPER-2184
     get_url:
@@ -128,7 +116,11 @@
       dest: ../templates/other/zookeeper-3.4.10.1.jar
 
   - name: SCP the patched Zookeepeer JAR to the master
-    command: scp ../templates/other/zookeeper-3.4.10.1.jar "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../templates/other/zookeeper-3.4.10.1.jar "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Zookeeper patch script to the master
-    command: scp ../templates/other/patch_zookeeper.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/
+    command: scp ../templates/other/patch_zookeeper.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
+
+  - name: Set chmod +x on all the scripts
+    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" chmod +x /tmp/kafkatest/{{ kafka_cluster_identifier }}/*.sh
+

@@ -18,10 +18,10 @@
     command: openssl pkcs12 -export -password pass:changeit -out ../output/cert/mesoscert.pkcs12 -in ../output/cert/mesoscert.pem
 
   - name: Import PKCS12 into a Java keystore
-    command: keytool -importkeystore -deststorepass changeit -destkeypass changeit -destkeystore ../output/cert/schema-keystore.jks -srckeystore ../output/cert/mesoscert.pkcs12 -srcstoretype PKCS12 -srcstorepass changeit
+    command: keytool -importkeystore -deststorepass changeit -destkeypass changeit -destkeystore ../output/cert/{{ kafka_cluster_identifier }}-kafka-keystore.jks -srckeystore ../output/cert/mesoscert.pkcs12 -srcstoretype PKCS12 -srcstorepass changeit
 
   - name: Base64 encode keystore
-    shell: cat ../output/cert/schema-keystore.jks | base64 | tr -d '\n' > ../output/cert/schema-keystore.jks.base64
+    shell: cat ../output/cert/{{ kafka_cluster_identifier }}-kafka-keystore.jks | base64 | tr -d '\n' > ../output/cert/{{ kafka_cluster_identifier }}-kafka-keystore.jks.base64
 
   - name: Add the Keystore as a secret
-    command: dcos security secrets create -f ../output/cert/schema-keystore.jks.base64 {{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__mykeystore
+    command: dcos security secrets create -f ../output/cert/{{ kafka_cluster_identifier }}-kafka-keystore.jks.base64 {{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__mykeystore
