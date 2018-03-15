@@ -2,5 +2,5 @@
 - hosts: localhost
   connection: local
   tasks:
-  - name: Build the client-jaas-testing.conf in the output directory
-    template: src=../templates/other/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh
+  - name: Windows SSH
+    template: src=../templates/other/windows-install-openssh.ps1.j2 dest=../output/keytabs/windows-install-openssh.ps1
