@@ -2,4 +2,4 @@
 
 echo "This is an SSL test at $(date)" | kafka-console-producer --broker-list {{ broker_tls_endpoint.stdout }} \
 --topic securetest \
---producer.config /tmp/kafkatest/{{ kafka_cluster_identifier }}-client.properties
+--producer.config /tmp/kafkatest/{{ kafka_cluster_identifier }}/{{ kafka_cluster_identifier }}-client.properties

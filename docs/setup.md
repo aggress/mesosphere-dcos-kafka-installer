@@ -4,7 +4,7 @@ Instructions below are for macOS only
 
 ## Tooling
 
-- Ansible <3
+- Ansible
 - aws-shell
 - DC/OS CLI
 - Python
@@ -29,7 +29,6 @@ Add your AWS secret and key with `aws configure` or edit the `~/aws/credentials`
 If you're using brew, you may have multiple versions of Python on your system in different locations.
 Ansible calls `/usr/bin/python`, so any required modules need to be installed in its context.
 Why the strange param when installing boto3? https://github.com/PokemonGoF/PokemonGo-Bot/issues/245.
-..Working through all the **** so you don't have to.
 
 ```
 sudo /usr/bin/python -m easy_install pip
