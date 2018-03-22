@@ -30,16 +30,16 @@
     failed_when: "'error' in zookeeper_endpoint.stderr"
 
   - name: Build the Docker Kafka client testing shell script
-    template: src=../templates/other/docker-kafka-client.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh
+    template: src=../templates/other/docker-kafka-client.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh mode=0755
 
   - name: Build the Producer test shell script
-    template: src=../templates/other/kafka-console-producer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh
+    template: src=../templates/other/kafka-console-producer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh mode=0755
 
   - name: Build the Consumer test shell script
-    template: src=../templates/other/kafka-console-consumer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh
+    template: src=../templates/other/kafka-console-consumer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-consumer-test.sh mode=0755
 
   - name: Build the Topic test shell script
-    template: src=../templates/other/kafka-topic-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh
+    template: src=../templates/other/kafka-topic-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-topic-test.sh mode=0755
 
   - name: Create a temporary directory for the Kafka client configs
     shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" mkdir -p /tmp/kafkatest/{{ kafka_cluster_identifier }}
@@ -105,7 +105,7 @@
     command: scp ../output/other/{{ kafka_cluster_identifier }}-rest-proxy-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: Build the Schema Registry client test script in the output directory
-    template: src=../templates/other/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh
+    template: src=../templates/other/schema-registry-testing.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh mode=0755
 
   - name: SCP the Schema Registry client test script to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-schema-registry-testing.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
@@ -116,14 +116,12 @@
       dest: ../templates/other/zookeeper-3.4.10.1.jar
 
   - name: Build the patch zookeeper script
-    template: src=../templates/other/patch_zookeeper.sh.j2 dest=../output/other/patch_zookeeper.sh
+    template: src=../templates/other/patch_zookeeper.sh.j2 dest=../output/other/patch_zookeeper.sh mode=0755
 
   - name: SCP the patched Zookeepeer JAR to the master
     command: scp ../templates/other/zookeeper-3.4.10.1.jar "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the Zookeeper patch script to the master
     command: scp ../output/other/patch_zookeeper.sh "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
-
-  - name: Set chmod +x on all the scripts
-    shell: ssh "{{ ssh_user }}"@"{{ dcos_master.stdout }}" chmod +x /tmp/kafkatest/{{ kafka_cluster_identifier }}/*.sh
+  
 
