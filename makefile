@@ -67,10 +67,8 @@ clean:
 	rm -f $(BUILDDIR)/other/*
 	rm -f tasks/*.retry
 
-open-control-center:
+open-control:
 	ansible-playbook -i hosts tasks/open_control_center.yaml
-
-
 
 install-prereqs:
 	ansible-playbook -i hosts tasks/install_cli_subcommands.yaml
@@ -136,6 +134,9 @@ get-ad-facts:
 setup-client-test:
 	ansible-playbook -vvv -i hosts tasks/setup_client_test.yaml
 
+open-dcos-ui:
+	open https://$(shell grep masters -A 1 ~/code/dcos-ansible/hosts | tail -n1)
+
 destroy-ad:
 	@while [ -z "$$CONTINUE" ]; do \
       read -r -p "Confirm to destroy your test AD server [y/n]: " CONTINUE; \
@@ -167,8 +168,8 @@ deploy-dcos:
 	  bash ansibilize.sh
 	cd ~/code/dcos-ansible ;\
 	  ansible-playbook -i hosts -u centos -b main.yaml
-	  sleep 120;
-	  dcos cluster setup --insecure $(shell grep masters -A 1 ~/code/dcos-ansible/hosts | tail -n1)
+	sleep 120;
+	dcos cluster setup --insecure $(shell grep masters -A 1 ~/code/dcos-ansible/hosts | tail -n1)
 
 destroy-dcos:
 	@while [ -z "$$CONTINUE" ]; do \
