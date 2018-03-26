@@ -168,8 +168,6 @@ deploy-dcos:
 	  bash ansibilize.sh
 	cd ~/code/dcos-ansible ;\
 	  ansible-playbook -i hosts -u centos -b main.yaml
-	sleep 120;
-	dcos cluster setup --insecure $(shell grep masters -A 1 ~/code/dcos-ansible/hosts | tail -n1)
 
 destroy-dcos:
 	@while [ -z "$$CONTINUE" ]; do \
