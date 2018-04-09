@@ -5,14 +5,14 @@
   - set_fact: package="{{ package_to_install }}"
 
   - name: Get Zookeeper endpoints
-    shell: dcos beta-confluent-kafka-zookeeper --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-beta-confluent-kafka-zookeeper endpoint clientport | jq -r .dns[] | paste -sd, -
+    shell: dcos {{ beta_or_ga }}-zookeeper --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-zookeeper endpoint clientport | jq -r .dns[] | paste -sd, -
     register: zk_endpoints
-    when: package == "confluent-connect-x" or package == "confluent-schema-registry-x" or package == "confluent-control-center-x" or package == "beta-confluent-kafka" or package == "confluent-rest-proxy-x"
+    when: package == "confluent-connect" or package == "confluent-schema-registry" or package == "confluent-control-center" or package == "confluent-rest-proxy" or package == "confluent-kafka" or package == "beta-confluent-kafka"
 
   - name: Get Broker-TLS endpoints
-    shell: dcos beta-confluent-kafka --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-beta-confluent-kafka endpoint broker-tls | jq -r .dns[] | paste -sd, -
+    shell: dcos {{ beta_or_ga }}-kafka --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-kafka endpoint broker-tls | jq -r .dns[] | paste -sd, -
     register: broker_tls_endpoints
-    when: package == "confluent-connect-x" or package == "confluent-control-center-x" or package == "confluent-rest-proxy-x"
+    when: package == "confluent-connect" or package == "confluent-control-center" or package == "confluent-rest-proxy"
 
   - name: Build {{ package }} with all the security options JSON
     template: src=../templates/options/{{ package }}.json-strict-secure.j2 dest=../output/options/{{ kafka_cluster_identifier }}-{{ package }}.json

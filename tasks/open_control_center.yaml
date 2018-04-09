@@ -3,11 +3,11 @@
   connection: local
   tasks:
   - name: Find the host Control Center is running on
-    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-confluent-control-center-x | jq -r .tasks[0].host
+    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-control | jq -r .tasks[0].host
     register: c3_host
 
   - name: Find the port Control Center is running on
-    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-confluent-control-center-x | jq -r .tasks[0].ports[0]
+    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-control | jq -r .tasks[0].ports[0]
     register: c3_port
 
   - name: Get the DC/OS master from DC/OS node

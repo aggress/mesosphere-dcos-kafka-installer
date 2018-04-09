@@ -1,6 +1,6 @@
 {
   "rest-proxy": {
-    "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-{{ package }}",
+    "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-rest",
     "listener_protocol": "https",
     "keystore_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__mykeystore",
     "virtual_network_enabled": {{ virtual_network_enabled|lower }},
@@ -24,6 +24,6 @@
     "kerberos_krb5_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/krb5"
   },
   "schema-registry": {
-    "url": "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081"
+    "url": "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081"
   }
 }

@@ -37,7 +37,7 @@ If you need a test AD server, please read [Active Directory](https://github.com/
 make ad-deploy  
 ```
 
-Whether you're using a test AD server or a corporate one, you now need to create the batch script which automates and documents the user, principal, keytab creation.
+Whether you're using a test AD server or a corporate one, you now need to create the batch script which automates the user, principal and keytab creation.
 
 ```
 make ad-keytabs-bat
@@ -48,9 +48,10 @@ Copy `output/create_keytabs.bat` onto the AD server, run it and copy the generat
 ## Run the one-time-setup which:
 
 - Creates a special certificate required for the l4lb service
+- Validates the keytabs in `output/keytabs`
 - Adds the keytabs as DC/OS secrets
 - Adds the Kerberos krb5.conf as a secret
-- Adds the client-jaas.conf as a secrets
+- Adds the client-jaas.conf as secrets
 - Adds the (temporary) confluent-aux-universe where the security enabled community packages currently reside
 
 ```
@@ -62,7 +63,9 @@ Now you're read to deploy a stack. This should be done in the order below as the
 make install-cp-zookeeper
 ```
 
-Watch Ansible do its magic and your new service is deployed
+Watch Ansible do its magic and your new service is deployed. You want to let this complete before moving onto Kafka as it has a dependency on getting the Zookeeper endpoints as does Schema Registry with Kafka.
+
+
 
 ## Repeat for the rest of the stack
 ```

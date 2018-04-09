@@ -80,44 +80,42 @@ install-prereqs:
 	dcos package repo add --index=0 "confluent-aux-universe" https://s3.amazonaws.com/mbgl-universe/repo-up-to-1.10.json
 
 install-zookeeper:
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=beta-confluent-kafka-zookeeper"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=beta-confluent-kafka-zookeeper"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-zookeeper"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-zookeeper"
 
 install-kafka:
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=beta-confluent-kafka"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=beta-confluent-kafka"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-kafka"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-kafka"
 
 install-schema:
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-schema-registry-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-schema-registry-x"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-schema-registry"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-schema-registry"
 
 install-rest:
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-rest-proxy-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-rest-proxy-x"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-rest-proxy"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-rest-proxy"
 
 install-connect:
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-connect-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-connect-x"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-connect"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-connect"
 
 install-control:
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-control-center-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-control-center-x"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-control-center"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-control-center"
 
 install-full-stack:
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=beta-confluent-kafka-zookeeper"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=beta-confluent-kafka-zookeeper"
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=beta-confluent-kafka"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=beta-confluent-kafka"
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-schema-registry-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-schema-registry-x"
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-rest-proxy-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-rest-proxy-x"
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-connect-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-connect-x"
-	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-control-center-x"
-	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-control-center-x"
-
-
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-kafka-zookeeper"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-kafka-zookeeper"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-kafka"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-kafka"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-schema-registry"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-schema-registry"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-rest-proxy"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-rest-proxy"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-connect"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-connect"
+	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-control-center"
+	ansible-playbook -i hosts tasks/deploy.yaml -e "package_to_install=confluent-control-center"
 
 build-keytabs-script:
 	ansible-playbook -i hosts tasks/build_ad_keytabs.yaml
@@ -156,8 +154,8 @@ janitor:
       read -r -p "Confirm to run Janitor on both Zookeeper and Kafka [y/n]: " CONTINUE; \
     done ; \
     [ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
-	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=beta-confluent-kafka-zookeeper"
-	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=beta-confluent-kafka"
+	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=confluent-kafka-zookeeper"
+	ansible-playbook -i hosts tasks/janitor.yaml -e "package_to_janitor=confluent-kafka"
 
 deploy-dcos:
 	cd ~/code/terraform-ansible-dcos; \

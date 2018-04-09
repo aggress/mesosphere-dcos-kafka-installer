@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Create a private and public keypair for the service
+    command: dcos security org service-accounts keypair ../output/other/mlb-private-key.pem ../output/other/mlb-public-key.pem
+
+  - name: Create a new service account using the previously created key
+    command: dcos security org service-accounts create -p ../output/other/mlb-public-key.pem -d "mlb service account" mlb-principal
+
+  - name: Create a secret
+    command: dcos security secrets create-sa-secret --strict ../output/other/mlb-private-key.pem mlb-principal marathon-lb/mlb-secret
+
+  - name: ACL 1
+    command: dcos security org users grant mlb-principal dcos:service:marathon:marathon:services:/ read --description "Allows access to any service launched by the native Marathon instance"
+
+  - name: ACL 2
+    command: dcos security org users grant mlb-principal dcos:service:marathon:marathon:admin:events read --description "Allows access to Marathon events"
+
+  - name: Create the options.json
+    template: src=../templates/options/mlb.json.j2 dest=../output/options/mlb.json
+
+  - name: Install marathon-lb
+    command: dcos package install marathon-lb --options=../output/options/mlb.json --yes

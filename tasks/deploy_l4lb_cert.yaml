@@ -3,7 +3,7 @@
   connection: local
   tasks:
   - name: Create new self signed certificate for l4lb services
-    shell: dcos security cluster ca newcert --cn *.marathon.l4lb.thisdcos.directory --name-c US --name-st CA --name-o "Mesosphere, Inc." --name-l "San Francisco" --key-algo rsa --key-size 2048 --host *.marathon.l4lb.thisdcos.directory -j > ../output/cert/mesoscert.json
+    shell: dcos security cluster ca newcert --cn *.marathon.l4lb.thisdcos.directory --name-c US --name-st CA --name-o "Mesosphere, Inc." --name-l "San Francisco" --key-algo rsa --key-size 2048 --host *.marathon.{{ instance_domain }} -j > ../output/cert/mesoscert.json
 
   - name: Convert JSON blob into a pem file - certificate
     shell: cat ../output/cert/mesoscert.json | jq -r .certificate > ../output/cert/mesoscert.pem

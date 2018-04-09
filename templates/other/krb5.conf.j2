@@ -17,5 +17,5 @@
     }
 
 [domain_realm]
-    .{{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory = {{ realm|upper }}
-    {{ kafka_cluster_identifier }}-{{ beta_or_ga }}-kafka.autoip.dcos.thisdcos.directory = {{ realm|upper }}
+    .{{ kafka_cluster_identifier }}-kafka.{{ instance_domain }} = {{ realm|upper }}
+    {{ kafka_cluster_identifier }}-kafka.{{ instance_domain }} = {{ realm|upper }}
