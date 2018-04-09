@@ -1,0 +1,158 @@
+---
+# DC/OS security mode: strict (permissive and disabled not supported yet)
+security: strict
+
+# Kafka Kerberos and TLS enabled. true: Kerberos & TLS, false: TLS (only true supported right now)
+all_the_security: true
+
+# Service group: The folder the stack lives under: dev, eng, test, prod etc
+service_group: dev
+
+# Kafka cluster identifier: In a multi-tenant environment you'll require a unique name for each component and stack
+# eg. 123456, streaming, 123456-payments. This will also be used for naming AD credentials and clusters.
+# Combined with the service_group, the format of groups and services would then be like
+# /dev/123456-kafka/123456-beta-confluent-kafka. Due to Active Directory limitations, this cannot be more than
+# 20 characters, and in its current format, this cannot be more than 9.
+kafka_cluster_identifier: 654321
+
+
+#################### 
+# Zookeeper Options
+#################### 
+
+# Number of Zookeeper nodes
+zk_nodes: 3
+
+
+#################### 
+# Kafka Template Options
+#################### 
+
+# Kafka CPU allocation
+# Default: 1
+kafka_cpu: 1
+
+# Kafka memory allocation (MB)
+# Default: 2048
+kafka_memory: 2048
+
+# Kafka heap allocation
+# Default: 512
+kafka_heap: 512
+
+# Number of Kafka brokers: 1,3,5,7 etc
+# Default: 3
+kafka_brokers: 3
+
+# Kafka disk type: ROOT or MOUNT
+# Default: ROOT
+kafka_disk_type: ROOT
+
+# Kafka disk path
+# Default: kafka-broker-data
+kafka_disk_path: kafka-broker-data
+
+# Kafka disk size (MB)
+# Default: 5000
+kafka_disk_size: 5000
+
+
+#################### 
+# REST Proxy & Schema Registry SSL client auth
+#################### 
+
+# SSL client auth: Secures REST Proxy and Schema Registry REST endpoints
+# By enabling this disables the use of curl to access each, and forces
+# use through a client or code which support Java keystore
+# Default: false
+ssl_client_auth: false
+
+
+#################### 
+# Virtual Network Options
+#################### 
+
+# Virtual network enabled: true or false
+# Default: false
+virtual_network_enabled: false
+
+# Virtual network name: dcos or calico for example
+# Default: dcos
+virtual_network_name: dcos
+
+
+#################### 
+# Kerberos
+#################### 
+
+# Active Directory server hostname: If this is AD on AWS for testing, will require the public DNS name
+ad_hostname:
+
+# AD user password: For testing purposes these can all be the same
+ad_user_password: MesosphereAD2018
+
+# Active Directory Path for user creation: OU=beta,OU=alpha,DC=ad,DC=mesosphere,DC=com
+ad_path: DC=mesosphere,DC=com
+
+# Kerberos Realm
+realm: mesosphere.com
+
+# Instance Domain: for custom advertised_listener: na4c.dcos.fakejpmc.net or default or autoip.dcos.thisdcos.directory
+instance_domain: cluster.dcos.mesosphere.com
+
+# Toggle testing on AWS, as this influences some plays like janitor.yaml: true | false
+on_aws: true
+
+# SSH user: used for testing purposes, for example, when setting up client testing to SCP files onto a master
+ssh_user: centos
+
+# Beta or GA: Right now this is locked to beta-confluent as security is not yet in the GA packages
+beta_or_ga: confluent
+
+
+#################### 
+# AWS CloudFormation Active Directory Specific Paramters
+#################### 
+
+# AD DomainNetBIOSName
+ad_netbios_name: AD
+
+# AWS region: e.g. us-west-2
+aws_region: us-west-2
+
+# EC2 Keypair: this needs to be available on the AWS region and in your ~/.ssh directory
+ec2_keypair:
+
+# SourceCidrForRDP: IP CIDR for access to AD RDP and SSH: eg. 0.0.0.0/0 or 192.168.1.2/32
+access_cidr: 0.0.0.0/0
+
+# SourceCidrForKerberos: IP CIDR for access to Kerberos on TCP/UDP 88 e.g. eg. 0.0.0.0/0 or 192.168.1.2/32
+kerberos_cidr: 0.0.0.0/0
+
+# Github SSH key to include in OpenSSH setup: like https://github.com/aggress.keys
+github_ssh_key: 
+
+
+#################### 
+# Other
+#################### 
+
+path_tmp: "/tmp"
+
+# An array used in multiple places
+beta_packages: [ 'beta-confluent-kafka-zookeeper', 'beta-confluent-kafka', 'confluent-connect-x', 'confluent-schema-registry-x', 'confluent-rest-proxy-x', 'confluent-control-center-x' ]
+
+community_packages: [ 'confluent-schema-registry', 'confluent-rest-proxy', 'confluent-connect', 'confluent-control-center' ]
+
+primaries: [ 'schema', 'rest', 'connect', 'control' ]
+
+packages: [ 'confluent-kafka-zookeeper', 'confluent-kafka', 'confluent-connect', 'confluent-schema-registry', 'confluent-replicator', 'confluent-control-center' ]
+
+folders: [ 'cert', 'keytabs', 'options', 'other']
+
+client_test_ip: 54.69.70.63
+
+##### NOT USED YET
+
+# Auto Launch xfreerdp after AWS AD has been built: true | false
+auto_xfreerdp: false

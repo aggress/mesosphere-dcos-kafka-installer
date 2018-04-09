@@ -2,3 +2,4 @@
 .DS_Store
 tasks/*.retry
 group_vars/all
+templates/other/zookeeper-3.4.10.1.jar
