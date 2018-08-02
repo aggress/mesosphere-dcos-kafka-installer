@@ -1,0 +1,6 @@
+#!/bin/bash
+
+docker run --rm -ti \
+-v /tmp/kafkatest:/tmp/kafkatest:rw \
+confluentinc/cp-kafka:4.0.0 \
+bash

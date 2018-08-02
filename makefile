@@ -77,7 +77,6 @@ install-prereqs:
 	ansible-playbook -i hosts tasks/deploy_l4lb_cert.yaml
 	ansible-playbook -i hosts tasks/make_configs.yaml
 	ansible-playbook -i hosts tasks/add_keytab_secrets.yaml
-	dcos package repo add --index=0 "confluent-aux-universe" https://s3.amazonaws.com/mbgl-universe/repo-up-to-1.10.json
 
 install-zookeeper:
 	ansible-playbook -i hosts tasks/setup.yaml -e "package_to_install=confluent-zookeeper"

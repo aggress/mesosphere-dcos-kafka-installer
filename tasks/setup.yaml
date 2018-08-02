@@ -16,4 +16,8 @@
 
   - name: Build {{ package }} with all the security options JSON
     template: src=../templates/options/{{ package }}.json-strict-secure.j2 dest=../output/options/{{ kafka_cluster_identifier }}-{{ package }}.json
-    when: all_the_security == true
+    when: all_the_security == 'all'
+
+  - name: Build {{ package }} with all the security options JSON
+    template: src=../templates/options/{{ package }}.json-strict-tls.j2 dest=../output/options/{{ kafka_cluster_identifier }}-{{ package }}.json
+    when: all_the_security == 'tls'
