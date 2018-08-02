@@ -1,0 +1,23 @@
+{
+  "rest-proxy": {
+    "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-rest",
+    "listener_protocol": "https",
+    "keystore_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__mykeystore",
+    "virtual_network_enabled": {{ virtual_network_enabled|lower }},
+    "virtual_network_name": "{{ virtual_network_name }}",
+    "ssl_client_auth": {{ ssl_client_auth|lower }},
+    "instances": 1,
+    "cpus": 2,
+    "mem": 1024,
+    "heap": 768,
+    "role": "*"
+  },
+  "kafka": {
+    "bootstrap_servers": "{{ broker_tls_endpoints.stdout }}",
+    "zookeeper_connect": "{{ zk_endpoints.stdout }}",
+    "client_security_protocol": "SSL"
+  },
+  "schema-registry": {
+    "url": "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081"
+  }
+}

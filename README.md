@@ -1,7 +1,7 @@
 
 # Mesosphere DC/OS Kafka Installer
 
-![Support DC/OS Version](https://img.shields.io/badge/Supported%20on%20DC/OS-1.10-7d58ff.svg?longCache=true&style=flat-square)
+![Support DC/OS Version](https://img.shields.io/badge/Supported%20on%20DC/OS-1.10-7d58ff.svg?longCache=true&style=flat-square) ![Support DC/OS Version](https://img.shields.io/badge/Supported%20on%20DC/OS-1.11-7d58ff.svg?longCache=true&style=flat-square)
 
 An Ansible based installer for Kafka & [Confluent Platform](https://www.confluent.io/product/confluent-platform/) on [DC/OS](https://mesosphere.com/product/)
 
@@ -11,7 +11,7 @@ This is a [DC/OS Community](https://dcos.io/community/) project and is not suppo
 
 ## Features
 
-* Deploys Confluent Platform Kafka with full security - Active Directory/Kerberos GSSAPI & SASL_SSL authentication
+* Deploys Confluent Platform Kafka with full security - Active Directory/Kerberos GSSAPI & SASL_SSL authentication or with TLS & SSL
 * Supports deployment of multiple Kafka clusters for multi-tenant environments
 * DC/OS group/folder support for organising clusters such as /dev/123456-kafka/
 * DC/OS strict mode security out of the box (only strict at this time)
@@ -32,19 +32,16 @@ This is a [DC/OS Community](https://dcos.io/community/) project and is not suppo
 
 ## Planned Features
 
-* DC/OS 1.11 support
 * CCM support
 * Endpoint management
 * Configurable resources for JSON options
 * Apache Kafka support
-* DC/OS permissive and disabled security modes
 * MIT Kerberos support
 * Standalone monitoring deployment integrated with dcos-metrics
 * Performance benchmarking
 
 ## Limitations
 
-* DC/OS 1.10 only
 * Strict mode only
 * Cluster identifier limited to 9 chars due to Active Directory Kerberos naming limitations
 * Confluent Connect does not provide security on its REST API endpoint, this is a limitation in the Confluent product

@@ -1,0 +1,34 @@
+{
+    "service": {
+        "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-kafka",
+        "virtual_network_enabled": {{ virtual_network_enabled|lower }},
+        "virtual_network_name": "{{ virtual_network_name }}",
+        "service_account": "{{ kafka_cluster_identifier }}-{{ package }}",
+        "service_account_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ package }}-private-key",
+        "security": {
+            "transport_encryption": {
+                "enabled": true
+            },
+            "ssl_authentication": {
+                "enabled": true
+            }
+        }
+    },
+    "kafka": {
+        "kafka_zookeeper_uri": "{{ zk_endpoints.stdout }}",
+        "auto_create_topics_enable": true,
+        "delete_topic_enable": true,
+        "confluent_support_metrics_enable": true
+    },
+    "brokers": {
+        "cpus": {{ kafka_cpu }},
+        "mem": {{ kafka_memory }},
+        "disk": {{ kafka_disk_size }},
+        "disk_type": "{{ kafka_disk_type}}",
+        "disk_path": "{{ kafka_disk_path }}",
+        "count": {{ kafka_brokers }},
+        "heap": {
+            "size": {{ kafka_heap }}
+        }
+    }
+}

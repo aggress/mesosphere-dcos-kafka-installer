@@ -5,9 +5,16 @@
   - name: Build the client-jaas.conf in the output directory
     template: src=../templates/client-jaas/{{ item }}-client-jaas.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-{{ item }}-client-jaas.conf
     with_items: "{{ community_packages }}"
+    when: all_the_security == 'all'
 
   - name: Build the krb5.conf in the output directory
     template: src=../templates/other/krb5.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-krb5.conf
+    when: all_the_security == 'all'
 
-  - name: Build the client.properties in the output directory
-    template: src=../templates/other/client.properties.j2 dest=../output/other/{{ kafka_cluster_identifier }}-client.properties
+  - name: Build the client.properties in the output directory for all the security
+    template: src=../templates/other/client.properties.j2-strict-secure dest=../output/other/{{ kafka_cluster_identifier }}-client.properties
+    when: all_the_security == 'all'
+
+  - name: Build the client.properties in the output directory for tls only
+    template: src=../templates/other/client.properties.j2-strict-tls dest=../output/other/{{ kafka_cluster_identifier }}-client.properties
+    when: all_the_security == 'tls'

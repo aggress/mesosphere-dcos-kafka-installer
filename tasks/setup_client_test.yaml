@@ -3,7 +3,8 @@
   connection: local
   tasks:
   - name: Get the DC/OS master from dcos node
-    shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
+    #shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
+    shell: dcos node ssh --master-proxy --leader --user=centos "curl http://whatismyip.akamai.com"
     register: dcos_master
 
   - name: Delete any existing truststore.jks as keytool will error, otherwise ignore
@@ -18,19 +19,25 @@
 
   - name: Build the client-jaas-testing.conf in the output directory
     template: src=../templates/client-jaas/client-jaas-testing.conf.j2 dest=../output/other/{{ kafka_cluster_identifier }}-client-jaas-testing.conf
+    when: all_the_security == 'all'
 
   - name: Get Broker-TLS endpoint for client testing
-    shell: dcos beta-confluent-kafka --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-beta-confluent-kafka endpoint broker-tls | jq -r .dns[0] | paste -sd, -
+    shell: dcos confluent-kafka --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-kafka endpoint broker-tls | jq -r .dns[0] | paste -sd, -
     register: broker_tls_endpoint
     failed_when: "'error' in broker_tls_endpoint.stderr"
 
   - name: Get Zookeeper endpoint for client testing
-    shell: dcos beta-confluent-kafka-zookeeper --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-beta-confluent-kafka-zookeeper endpoint clientport | jq -r .dns[0] | paste -sd, -
+    shell: dcos confluent-zookeeper --name={{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-zookeeper endpoint clientport | jq -r .dns[0] | paste -sd, -
     register: zookeeper_endpoint
     failed_when: "'error' in zookeeper_endpoint.stderr"
 
-  - name: Build the Docker Kafka client testing shell script
-    template: src=../templates/other/docker-kafka-client.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh mode=0755
+  - name: Build the Docker Kafka client testing shell script for all security
+    template: src=../templates/other/docker-kafka-client.sh.j2-strict-secure dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh mode=0755
+    when: all_the_security == 'all'
+
+  - name: Build the Docker Kafka client testing shell script for TLS security 
+    template: src=../templates/other/docker-kafka-client.sh.j2-strict-tls dest=../output/other/{{ kafka_cluster_identifier }}-docker-kafka-client.sh mode=0755
+    when: all_the_security == 'tls'
 
   - name: Build the Producer test shell script
     template: src=../templates/other/kafka-console-producer-test.sh.j2 dest=../output/other/{{ kafka_cluster_identifier }}-kafka-console-producer-test.sh mode=0755
@@ -58,15 +65,18 @@
 
   - name: SCP the client.keytab to the master
     command: scp ../output/keytabs/{{ kafka_cluster_identifier}}-clients.keytab "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
+    when: all_the_security == 'all'
 
   - name: SCP the client-jaas-testing.conf to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-client-jaas-testing.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
+    when: all_the_security == 'all'
 
   - name: SCP the client.properties to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-client.properties "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
 
   - name: SCP the krb5.conf to the master
     command: scp ../output/other/{{ kafka_cluster_identifier }}-krb5.conf "{{ ssh_user }}"@"{{ dcos_master.stdout }}":/tmp/kafkatest/{{ kafka_cluster_identifier }}
+    when: all_the_security == 'all'
 
   - name: Get the ca bundle back
     shell: curl -k -v $(dcos config show core.dcos_url)/ca/dcos-ca.crt -o ../output/cert/ca-bundle.crt
