@@ -1,0 +1,31 @@
+{
+  "connect": {
+    "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-connect",
+    "virtual_network_enabled": {{ virtual_network_enabled|lower }},
+    "virtual_network_name": "{{ virtual_network_name }}",
+    "instances": 1,
+    "cpus": 2,
+    "mem": 1024,
+    "heap": 768,
+    "role": "*",
+    "group_id": "dcos-connect-group",
+    "key_converter": "io.confluent.connect.avro.AvroConverter",
+    "key_converter_schema_enable": true,
+    "value_converter": "io.confluent.connect.avro.AvroConverter",
+    "value_converter_schema_enable": true
+  },
+  "kafka": {
+    "bootstrap_servers": "{{ broker_tls_endpoints.stdout }}",
+    "zookeeper_connect": "{{ zk_endpoints.stdout }}",
+    "client_security_protocol": "SASL_SSL",
+    "kerberos_enabled": true,
+    "client_sasl_mechanism": "GSSAPI",
+    "client_sasl_kerberos_service_name": "kafka",
+    "kerberos_keytab_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__{{ package }}_keytab",
+    "kerberos_jaas_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ package }}-jaas",
+    "kerberos_krb5_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/krb5"
+  },
+  "schema-registry": {
+    "url": "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081"
+  }
+}

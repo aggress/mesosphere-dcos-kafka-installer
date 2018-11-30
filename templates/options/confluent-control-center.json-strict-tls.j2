@@ -1,0 +1,26 @@
+{
+  "control-center": {
+    "name": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-{{ package }}",
+    "listener_protocol": "https",
+    "keystore_secret": "{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/__dcos_base64__mykeystore",
+    "virtual_network_enabled": {{ virtual_network_enabled|lower }},
+    "virtual_network_name": "{{ virtual_network_name }}",
+    "instances": 1,
+    "cpus": 2,
+    "mem": 4096,
+    "role": "*",
+    "confluent-controlcenter-internal-topics-partitions": 3,
+    "confluent-controlcenter-internal-topics-replication": 2,
+    "confluent-monitoring-interceptor-topic-partitions": 3,
+    "confluent-monitoring-interceptor-topic-replication": 2
+  },
+  "kafka": {
+    "bootstrap_servers": "{{ broker_tls_endpoints.stdout }}",
+    "zookeeper_connect": "{{ zk_endpoints.stdout }}",
+    "client_security_protocol": "SSL",
+    "kerberos_enabled": false
+  },
+  "connect": {
+    "connect_cluster": "{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-connect.marathon.l4lb.thisdcos.directory:8083"
+  }
+}
