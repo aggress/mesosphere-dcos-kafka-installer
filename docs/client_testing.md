@@ -18,6 +18,11 @@ That does all of the above and SCPs all the assets to your master. Now as ever, 
 Once the playbook's completed successfully, SSH to the master and get shell on the Confluent Docker container, which contains the Kafka clients
 ```
 ssh <ssh_user>@<master IP>
+
+or
+
+dcos node ssh --user=centos --master-proxy --leader
+
 cd /tmp/kafkatest
 ./<kafka_cluster_identifier>-docker-kafka-client.sh
 cd /tmp/kafkatest
