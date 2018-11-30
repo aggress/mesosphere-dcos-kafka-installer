@@ -12,7 +12,7 @@ set -o xtrace
 
 curl -k  -X POST -H "Content-Type: application/vnd.kafka.json.v2+json" \
       -H "Accept: application/vnd.kafka.v2+json" \
-      --data '{"records":[{"value":{"foo":"bar"}}]}' "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/topics/jsontest"
+      --data '{"records":[{"value":{"foo":"bar"}}]}' "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/topics/jsontest"
 sleep 2;
  
 
@@ -25,31 +25,31 @@ sleep 2;
 
 curl -k  -X POST -H "Content-Type: application/vnd.kafka.v2+json" \
       --data '{"name": "my_consumer_instance", "format": "json", "auto.offset.reset": "earliest"}' \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer
 sleep 2;      
  
 # No content in response
 
 curl -k  -X POST -H "Content-Type: application/vnd.kafka.v2+json" --data '{"topics":["jsontest"]}' \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/subscription
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/subscription
 sleep 2;
 
 # Expected output similar to:
 # [{"key":null,"value":{"foo":"bar"},"partition":0,"offset":0,"topic":"jsontest"}]
  
 curl -k  -X GET -H "Accept: application/vnd.kafka.json.v2+json" \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/records
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/records
 sleep 2;
 
 curl -k  -X GET -H "Accept: application/vnd.kafka.json.v2+json" \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/records
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance/records
 sleep 2;
 
 
 # No content in response
 
 curl -k  -X DELETE -H "Content-Type: application/vnd.kafka.v2+json" \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_json_consumer/instances/my_consumer_instance
 sleep 2; 
  
 
@@ -62,7 +62,7 @@ sleep 2;
 curl -k  -X POST -H "Content-Type: application/vnd.kafka.avro.v2+json" \
       -H "Accept: application/vnd.kafka.v2+json" \
       --data '{"value_schema": "{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}", "records": [{"value": {"name": "testUser"}}]}' \
-      "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/topics/avrotest"
+      "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/topics/avrotest"
 sleep 2;
 
 
@@ -74,7 +74,7 @@ sleep 2;
 curl -k  -X POST -H "Content-Type: application/vnd.kafka.avro.v2+json" \
       -H "Accept: application/vnd.kafka.v2+json" \
       --data '{"key_schema": "{\"name\":\"user_id\"  ,\"type\": \"int\"   }", "value_schema": "{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}", "records": [{"key" : 1 , "value": {"name": "testUser"}}]}' \
-      "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/topics/avrokeytest2"
+      "https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/topics/avrokeytest2"
 sleep 2;
  
 
@@ -87,30 +87,30 @@ sleep 2;
 
 curl -k  -X POST  -H "Content-Type: application/vnd.kafka.v2+json" \
       --data '{"name": "my_consumer_instance", "format": "avro", "auto.offset.reset": "earliest"}' \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer
 sleep 2;
 
 
 # No content in response
  
 curl -k  -X POST -H "Content-Type: application/vnd.kafka.v2+json" --data '{"topics":["avrotest"]}' \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/subscription
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/subscription
 sleep 2;
  
 # Expected output similar to:
 
 curl -k  -X GET -H "Accept: application/vnd.kafka.avro.v2+json" \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/records
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/records
 sleep 2;
 
 curl -k  -X GET -H "Accept: application/vnd.kafka.avro.v2+json" \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/records
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance/records
 sleep 2;
 
 
 # No content in response
  
 curl -k  -X DELETE -H "Content-Type: application/vnd.kafka.v2+json" \
-      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-rest-proxy-x.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance
+      https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-rest.marathon.l4lb.thisdcos.directory:8082/consumers/my_avro_consumer/instances/my_consumer_instance
 
 # End.

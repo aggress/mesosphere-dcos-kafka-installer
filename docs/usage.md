@@ -55,7 +55,7 @@ Copy `output/create_keytabs.bat` onto the AD server, run it and copy the generat
 - Adds the (temporary) confluent-aux-universe where the security enabled community packages currently reside
 
 ```
-make one-time-setup
+make install-prereqs
 ```
 
 Now you're read to deploy a stack. This should be done in the order below as there are dependencies. Zookeeper must come before Kafka and Schema Registry should come before the others.
