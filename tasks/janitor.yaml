@@ -3,7 +3,7 @@
   connection: local
   tasks:
   - name: Get the DC/OS master from DC/OS node
-    shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
+    shell: dcos node ssh --user={{ ssh_user }} --master-proxy --leader 'curl http://whatismyip.akamai.com'
     register: dcos_master
     
   - set_fact: package="{{ package_to_janitor }}"

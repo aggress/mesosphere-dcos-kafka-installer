@@ -3,15 +3,15 @@
   connection: local
   tasks:
   - name: Find the host Control Center is running on
-    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-control | jq -r .tasks[0].host
+    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-confluent-control-center | jq -r .tasks[0].host
     register: c3_host
 
   - name: Find the port Control Center is running on
-    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-control | jq -r .tasks[0].ports[0]
+    shell: dcos marathon app show /{{ service_group }}/{{ kafka_cluster_identifier }}-kafka/{{ kafka_cluster_identifier }}-confluent-control-center | jq -r .tasks[0].ports[0]
     register: c3_port
 
   - name: Get the DC/OS master from DC/OS node
-    shell: dcos cluster list --attached | tail -1 |  awk {'print $4'} | sed 's~http[s]*://~~g'
+    shell: dcos node ssh --user={{ ssh_user }} --master-proxy --leader 'curl http://whatismyip.akamai.com'
     register: dcos_master
 
   - name: Register a random local port for the SSH tunnel

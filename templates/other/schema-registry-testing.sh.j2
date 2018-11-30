@@ -7,7 +7,7 @@ set -o xtrace
 
 # List all subjects"
 
-curl -X GET -k https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects
+curl -X GET -k https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081/subjects
 sleep 2;
 
 
@@ -17,7 +17,7 @@ sleep 2;
 
 curl -k -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
     --data '{"schema": "{\"type\": \"string\"}"}' \
-    https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-key/versions
+    https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-key/versions
 sleep 2;
 
 
@@ -27,7 +27,7 @@ sleep 2;
 
 curl -k -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
     --data '{"schema": "{\"type\": \"string\"}"}' \
-    https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-value/versions
+    https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-value/versions
 sleep 2;
 
 
@@ -35,13 +35,13 @@ sleep 2;
 # Expected output:
 # ["Kafka-value","Kafka-key"]
 
-curl -k -X GET https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects
+curl -k -X GET https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081/subjects
 sleep 2;
 
 
 # Delete the most recently registered schema under subject Kafka-value
 
-curl -k -X DELETE https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-value/versions/latest
+curl -k -X DELETE https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081/subjects/Kafka-value/versions/latest
 sleep 2;
 
 
@@ -49,6 +49,6 @@ sleep 2;
 # Expected output:
 # ["Kafka-value"]
 
-curl -k -X GET https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-confluent-schema-registry-x.marathon.l4lb.thisdcos.directory:8081/subjects
+curl -k -X GET https://{{ service_group }}{{ kafka_cluster_identifier }}-kafka{{ kafka_cluster_identifier }}-schema.marathon.l4lb.thisdcos.directory:8081/subjects
 
 # End.

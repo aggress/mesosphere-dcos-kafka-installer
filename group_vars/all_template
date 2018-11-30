@@ -2,8 +2,8 @@
 # DC/OS security mode: strict (permissive and disabled not supported yet)
 security: strict
 
-# Kafka Kerberos and TLS enabled. true: Kerberos & TLS, false: TLS (only true supported right now)
-all_the_security: true
+# Kafka Kerberos and TLS enabled. true: Kerberos & TLS, false: TLS only
+all_the_security: false
 
 # Service group: The folder the stack lives under: dev, eng, test, prod etc
 service_group: dev
